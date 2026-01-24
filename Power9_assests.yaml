@@ -1,0 +1,7 @@
+displayName: Power9
+category: Power
+enabled: true
+models:
+  - 9846-AC2
+  - 9846-AE2
+  - 9846-12F
