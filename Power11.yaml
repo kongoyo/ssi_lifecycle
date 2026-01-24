@@ -1,0 +1,8 @@
+displayName: Power11
+enabled: true
+models:
+  - 9080-HEU
+  - 9824-42A
+  - 9824-22A
+  - 9856-42H
+  - 9856-22H
