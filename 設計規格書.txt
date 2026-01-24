@@ -1,0 +1,49 @@
+系統設計規格書：
+IBM Hardware Lifecycle Universal SRE
+1. 執行摘要 (Executive Summary)
+本系統旨在解決 IBM Power Systems 及相關硬體資產管理中，生命週期數據（公告、供貨、撤除、停產）抓取困難且格式不一的問題。
+透過自動化爬蟲技術 (Playwright) 與語義解析引擎，將非結構化的 IBM Sales Manual 網頁數據轉換為結構化的管理報表 (README.md)，
+以落實 IT 資產的精確風險控管。
+
+2. 核心功能拆解 (Feature Decomposition)
+根據 SRE 原則，我們將複雜功能拆解為以下 5 個可實現的子任務：
+
+子任務輸入輸出關鍵技術點難度 (1-5)
+1. 精確搜尋引擎型號 (String) -> 搜尋頁 (DOM)構造 www.ibm.com/docs/en/search/Family%20{model}+?type=salesmanual 繞過過多無關結果。
+2. 動態渲染與攔截URL -> 淨化後的 HTML使用 Playwright 攔截 CSS/Images 請求，降低 70% 頻寬與加載時間。
+3. 公告頁鏈接提取搜尋結果 -> 藍色標題與 URL運用定位器 (Locator) 精確抓取包含 /announcements/ 之核心文檔路徑。
+4. 語義解析引擎HTML Table -> 結構化 JSON模糊匹配技術 (Model/Announced/Withdrawn)，自動校正欄位偏移。
+5. 數據規範化模組自然語言日期 -> ISO-8601多格式轉化 (e.g., "31 Dec 2024" -> "2024-12-31")，確保稽核一致性。
+
+3. 系統架構設計 (System Architecture)
+3.1 邏輯流程配置讀取：掃描目錄下所有 .yaml 檔案，按類別載入硬體型號。
+3.2 搜尋定位：針對每個型號，模擬瀏覽器行為發送精確搜尋請求。
+3.3 深度解析：進入 Sales Manual 公告頁，鎖定 Product life cycle dates 表格。
+3.4 數據清洗：過濾 HTML 標籤，進行日期標準化處理。
+3.5 持久化輸出：生成格式對齊的 Markdown 報表，並即時更新終端機日誌。
+
+4. 技術架構細節 (Technical Stack)
+4.1 執行引擎: Playwright (Chromium Headless 模式) - 應對現代網頁的動態加載。
+4.2 解析核心: BeautifulSoup4 + Regular Expressions - 處理非標準 HTML 表格結構。
+4.3 數據交換: YAML - 便於維運團隊更新待查詢清單。
+4.4 日誌系統: Logging (INFO/WARNING/ERROR) - 提供 SRE 稽核與故障排除依據。
+
+5. 反思：
+5.1 潛在風險與缺陷 (Risk Assessment)
+作為團隊主管，必須預見並應對以下風險：
+5.1.1 反爬蟲機制 (WAF)：
+		風險：頻繁請求可能觸發 IBM 網頁防火牆 (WAF)，導致 IP 被暫時封鎖或出現驗證碼。
+		對策：實施隨機等待時間，並在未來的迭代中加入代理伺服器 (Proxy) 支持。
+5.1.2 表格結構變動：
+		風險：IBM Sales Manual 的表格標題若從 "Marketing Withdrawn" 改為 "Effective Withdrawn"，解析可能失敗。
+		對策：目前的模糊匹配已處理部分情況，但需定期校閱核心解析規則。
+5.1.3 效能瓶頸：
+		風險：Playwright 雖然穩定但消耗資源較大。
+		對策：目前已實施靜態資源過濾（攔截圖片/CSS），大幅降低內存壓力。
+5.1.4 數據準確性：
+		風險：若同一頁面出現多個 8202-E4B 的變體，解析器可能抓取第一筆而非最正確的一筆。
+		對策：導入 normalize_model_name 邏輯，確保字串精確比對。
+
+6. SRE 維運建議健康監控：
+		建議在執行後檢查 README.md 中 Timeout 或 Table Miss 的比例，若超過 15% 應檢查網路連線或 IBM 官網架構是否異動。
+		自動化集成：可將此腳本封裝至 GitHub Actions 或 GitLab CI，每月自動執行一次，確保生命週期報表為最新版本。

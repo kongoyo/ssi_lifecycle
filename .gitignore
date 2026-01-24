@@ -1,3 +1,11 @@
 headings.txt
 ssi_lifecycle.py
 requirements.txt
+debug_page.html
+debug_scraper.py
+debug_screenshot.png
+ibm_product_lifecycle_list.csv
+ssi_lifecycle1.py
+ssi_lifecycle1(OK).py
+ssi_lifecycle1(多線程OK).py
+test.yaml
