@@ -1,0 +1,12 @@
+displayName: SAN - IBM c-type
+enabled: true
+models:
+    - 8977-R50
+    - 8978-E04
+    - 8978-E08
+    - 8977-R16
+    - 8977-T32
+    - 8978-E16
+    - 8977-T48
+    - 8977-T96
+    - 9024-V48
