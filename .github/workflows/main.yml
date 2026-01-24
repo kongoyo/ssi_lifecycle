@@ -1,0 +1,29 @@
+name: Auto Update IBM Lifecycle
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # 每週一執行
+  workflow_dispatch:      # 支援手動觸發
+
+jobs:
+  build-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # 重要：賦予寫入 README 的權限
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and Run Scraper
+        run: |
+          docker build -t ibm-scraper .
+          docker run --name scraper-container ibm-scraper
+          # 將容器內更新後的 README 複製出來
+          docker cp scraper-container:/app/README.md ./README.md
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: 自動更新 IBM 生命週期表 [skip ci]"
+          file_pattern: 'README.md'
