@@ -1,6 +1,6 @@
 # IBM Power Hardware Lifecycle
 
-## Power9.yaml
+## Power9
 
 | Model    | Announced  | Available  | Withdrawn  | Discontinued |
 |----------|------------|------------|------------|--------------|
@@ -8,7 +8,7 @@
 | 9846-AE2 | 2015-02-23 | 2015-04-24 | 2018-07-14 | 2022-12-31   |
 | 9846-12F | 2016-05-24 | 2016-06-10 | 2021-01-17 | 2023-12-31   |
 
-## power10.yaml
+## power10
 
 | Model    | Announced  | Available  | Withdrawn | Discontinued |
 |----------|------------|------------|-----------|--------------|
