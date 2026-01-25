@@ -148,3 +148,99 @@
 | 9241-B05 | 2020-09-08 | 2020-09-18 | - | - | [Family 9241+01 IBM SANnav](https://www.ibm.com/docs/en/announcements/sannav-2020-09-08-2) |
 | 9241-E05 | 2020-09-08 | 2020-09-18 | - | - | [Family 9241+01 IBM SANnav](https://www.ibm.com/docs/en/announcements/sannav-2020-09-08-2) |
 | 9241-G05 | 2020-09-08 | 2020-09-18 | - | - | [Family 9241+01 IBM SANnav](https://www.ibm.com/docs/en/announcements/sannav-2020-09-08-2) |
+
+## IBM Lifecycle 掃描報表 (2026/1/25 下午6:01:59)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 2421-AP1 | 2015-05-11 | 2015-07-17 | 2020-05-26 | 2021-12-31 | [Family 2421+05 IBM Storage Appliance Model AP1](https://www.ibm.com/docs/en/announcements/storage-appliance-model-ap1) |
+| 3480-A22 | 1988-04-01 | 1989-12-19 | 1991-05-20 | - | [3480-A22 IBM Magnetic Tape Subsystem Model A22](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a22) |
+| 3490-A20 | 1991-02-19 | 1991-04-01 | 1998-09-25 | 2019-12-31 | [3490-A20 IBM Magnetic Tape Subsystem Model A20](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a20) |
+| 3490-C11 | 1992-02-18 | 1992-04-17 | 1998-09-25 | 2015-04-30 | [3490-C11 IBM Magnetic Tape Subsystem Model C11](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-c11) |
+| 3490-C22 | 1992-02-18 | 1992-04-17 | 1998-09-25 | 2015-04-30 | [3490-C22 IBM Magnetic Tape Subsystem Model C22](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-c22) |
+| 3490-D31 | 1989-08-21 | 1989-10-27 | 1994-03-18 | 2010-12-31 | [3490-D31 IBM Magnetic Tape Subsystem Model D31](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d31) |
+| 3490-D32 | 1989-08-21 | 1989-10-27 | 1994-03-18 | 2012-12-31 | [3490-D32 IBM Magnetic Tape Subsystem Model D32](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d32) |
+| 3490-D41 | 1991-02-19 | 1991-06-14 | 1992-12-15 | 2009-06-30 | [3490-D41 IBM Magnetic Tape Subsystem Model D41](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d41) |
+| 3490-D42 | 1991-02-19 | 1991-06-14 | 1992-12-15 | 2009-06-30 | [3490-D42 IBM Magnetic Tape Subsystem Model D42](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d42) |
+| 3490-E01 | 1994-02-01 | 1994-03-25 | 1997-05-09 | 2019-12-31 | [3490-E01 IBM Magnetic Tape Subsystem Model E01](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-e01) |
+
+## IBM Lifecycle 掃描報表 (2026/1/25 下午6:53:29)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 2421-AP1 | 2015-05-11 | 2015-07-17 | 2020-05-26 | 2021-12-31 | [Family 2421+05 IBM Storage Appliance Model AP1](https://www.ibm.com/docs/en/announcements/storage-appliance-model-ap1) |
+| 3480-A22 | 1988-04-01 | 1989-12-19 | 1991-05-20 | - | [3480-A22 IBM Magnetic Tape Subsystem Model A22](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a22) |
+| 3490-A20 | 1991-02-19 | 1991-04-01 | 1998-09-25 | 2019-12-31 | [3490-A20 IBM Magnetic Tape Subsystem Model A20](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a20) |
+| 3490-C11 | 1992-02-18 | 1992-04-17 | 1998-09-25 | 2015-04-30 | [3490-C11 IBM Magnetic Tape Subsystem Model C11](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-c11) |
+| 3490-C22 | 1992-02-18 | 1992-04-17 | 1998-09-25 | 2015-04-30 | [3490-C22 IBM Magnetic Tape Subsystem Model C22](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-c22) |
+| 3490-D31 | 1989-08-21 | 1989-10-27 | 1994-03-18 | 2010-12-31 | [3490-D31 IBM Magnetic Tape Subsystem Model D31](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d31) |
+| 3490-D32 | 1989-08-21 | 1989-10-27 | 1994-03-18 | 2012-12-31 | [3490-D32 IBM Magnetic Tape Subsystem Model D32](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d32) |
+| 3490-D41 | 1991-02-19 | 1991-06-14 | 1992-12-15 | 2009-06-30 | [3490-D41 IBM Magnetic Tape Subsystem Model D41](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d41) |
+| 3490-D42 | 1991-02-19 | 1991-06-14 | 1992-12-15 | 2009-06-30 | [3490-D42 IBM Magnetic Tape Subsystem Model D42](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-d42) |
+| 3490-E01 | 1994-02-01 | 1994-03-25 | 1997-05-09 | 2019-12-31 | [3490-E01 IBM Magnetic Tape Subsystem Model E01](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-e01) |
+| 3490-F11 | 1997-02-11 | 1997-02-21 | 2002-06-28 | 2007-06-30 | [3490-F11 IBM Magnetic Tape Subsystem Model F11](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-f11) |
+| 3490-FC0 | 1998-03-03 | 1998-03-20 | 2002-06-28 | 2007-06-30 | [3490-FC0 IBM Rack Model FC0](https://www.ibm.com/docs/en/announcements/rack-model-fc0) |
+
+## IBM Lifecycle 掃描報表 (2026/1/25 下午7:13:33)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 9024-V48 | 2023-10-10 | 2023-11-03 | - | - | [Family 9024+01 IBM Storage Networking SAN48C-7](https://www.ibm.com/docs/en/announcements/family-902401-storage-networking-san48c-7) |
+| 9348-001 | 1989-10-01 | 1989-10-01 | 1999-02-26 | 2019-12-31 | [9348-001 IBM Magnetic Tape Unit Model 001](https://www.ibm.com/docs/en/announcements/magnetic-tape-unit-model-001) |
+| 8203-E4A | 2008-01-29 | 2008-02-29 | 2011-05-27 | 2019-03-31 | [Family 8203+01 IBM Power Systems Server Model E4A](https://www.ibm.com/docs/en/announcements/power-systems-server-model-e4a) |
+| 8202-E4B | 2010-08-17 | 2010-09-17 | 2012-05-25 | 2019-09-30 | [Family 8202+01 IBM Power 720 Express Server](https://www.ibm.com/docs/en/announcements/power-720-express-server) |
+| 8202-E4D | 2013-02-05 | 2013-02-20 | 2016-05-20 | 2020-12-31 | [Family 8202+03 IBM Power 720 Express](https://www.ibm.com/docs/en/announcements/power-720-express) |
+
+## IBM Lifecycle 全清單掃描報表 (2026/1/25 下午7:20:47)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | - |
+
+## IBM Lifecycle 全掃描報表 (2026/1/25 下午7:23:33)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | - |
+
+## IBM Lifecycle 全清單掃描報表 (2026/1/25 下午7:26:11)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | 1985-05-01 | 1986-05-30 | 1989-12-19 | - | [3480-A11 IBM Magnetic Tape Subsystem Model A11](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a11) |
+
+## IBM Lifecycle 稽核報表 (2026/1/25 下午7:32:39)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | - |
+
+## IBM Lifecycle 全量稽核報表 - SRE 版 (2026/1/25 下午7:35:35)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與來源超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | - |
+
+## IBM Lifecycle 全量稽核報表 (2026/1/25 下午7:36:54)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與來源 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | - |
+
+## IBM Lifecycle 大規模稽核報告 (2026/1/25 下午7:39:23)
+
+| Model | Announce | Available | Withdraw | Discontinued | SalesManual | LifecycleDate | 連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | - | - | - | - | true | true | - |
+
+## IBM Lifecycle 全量稽核報表 - 旗艦診斷版 (2026/1/25 下午7:42:13)
+
+| Model | Announce | Available | Withdraw | Discontinued | SalesManual | Lifecycle | PreFormat | 連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | 1985-05-01 | 1986-05-30 | 1989-12-19 | 2005-12-31 | true | true | true | [連結](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a11) |
+
+## IBM Lifecycle 全量稽核報表 - 終極修復版 (2026/1/25 下午7:43:44)
+
+| Model | Announce | Available | Withdraw | Discontinued | SalesManual | Lifecycle | PreFormat | 連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | 1985-05-01 | 1986-05-30 | 1989-12-19 | 2005-12-31 | true | true | true | [連結](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a11) |
