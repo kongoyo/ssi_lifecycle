@@ -33,3 +33,18 @@
 | 9105-41B | 2022-07-12 | 2022-07-22 | - | - | [Family 9105+04 IBM Power S1014 (9105-41B)](https://www.ibm.com/docs/en/announcements/power-s1014-9105-41b) |
 | 9223-22S | 2020-10-06 | 2020-11-20 | 2023-10-20 | - | [Family 9223+03 IBM Power System H922 (9223-22S)](https://www.ibm.com/docs/en/announcements/power-system-h922-9223-22s-2023-10-24) |
 | 9223-42S | 2020-10-06 | 2020-11-20 | 2023-10-20 | - | [Family 9223+04 IBM Power System H924 (9223-42S)](https://www.ibm.com/docs/en/announcements/power-system-h924-9223-42s-2023-10-24) |
+
+## IBM Lifecycle 掃描報表 (2026/1/25 下午3:49:07)
+
+| Model | Announce | Available | Withdraw | Discontinued | 標題與超連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 8284-21A | 2017-02-14 | 2017-03-17 | 2020-08-31 | 2025-07-31 | [Family 8284+02 IBM Power System S812 server Model 21A](https://www.ibm.com/docs/en/announcements/power-system-s812-server-model-21a) |
+| 8284-22A | 2014-04-28 | 2014-06-10 | 2019-02-28 | 2024-03-31 | [Family 8284+01 IBM Power System S822 server](https://www.ibm.com/docs/en/announcements/power-system-s822-server) |
+| 8286-41A | 2014-04-28 | 2014-06-10 | 2019-05-31 | 2024-05-31 | [Family 8286+01 IBM Power System S814 server](https://www.ibm.com/docs/en/announcements/power-system-s814-server) |
+| 8286-42A | 2014-04-28 | 2014-06-10 | 2019-02-28 | 2024-03-31 | [Family 8286+02 IBM Power System S824 server](https://www.ibm.com/docs/en/announcements/power-system-s824-server) |
+| 8408-E8E | 2015-05-11 | 2015-06-05 | 2017-07-14 | 2023-10-31 | [Family 8408+02 IBM Power System E850 Model E8E](https://www.ibm.com/docs/en/announcements/power-system-e850-model-e8e) |
+| 8408-44E | 2016-10-11 | 2016-11-18 | 2019-10-31 | 2024-10-31 | [Family 8408+03 IBM Power System E850C server model 44E](https://www.ibm.com/docs/en/announcements/power-system-e850c-server-model-44e) |
+| 9119-MME | 2014-10-06 | 2014-11-18 | 2017-07-14 | 2024-10-31 | [Family 9119+06 IBM Power 870 Server (9119-MME)](https://www.ibm.com/docs/en/announcements/power-870-server-9119-mme) |
+| 9080-MME | 2016-09-19 | 2016-09-29 | 2019-10-31 | 2024-10-31 | [Family 9080+02 IBM Power E870C Enterprise server Model MME](https://www.ibm.com/docs/en/announcements/power-e870c-enterprise-server-model-mme) |
+| 9119-MHE | 2014-10-06 | 2014-11-18 | 2017-07-14 | 2024-10-31 | [Family 9119+05 IBM Power System E880 (9119-MHE)](https://www.ibm.com/docs/en/announcements/power-system-e880-9119-mhe) |
+| 9080-MHE | 2016-09-19 | 2016-09-29 | 2019-10-31 | 2024-10-31 | [Family 9080+01 IBM Power System E880C (9080-MHE)](https://www.ibm.com/docs/en/announcements/power-system-e880c-9080-mhe) |
