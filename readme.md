@@ -244,3 +244,29 @@
 | Model | Announce | Available | Withdraw | Discontinued | SalesManual | Lifecycle | PreFormat | 連結 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 3480-A11 | 1985-05-01 | 1986-05-30 | 1989-12-19 | 2005-12-31 | true | true | true | [連結](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a11) |
+
+## IBM Lifecycle 全量稽核報表 - 終極修復版 (2026/1/25 下午7:49:50)
+
+| Model | Announce | Available | Withdraw | Discontinued | SalesManual | Lifecycle | PreFormat | 連結 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 3480-A11 | 1985-05-01 | 1986-05-30 | 1989-12-19 | 2005-12-31 | true | true | true | [連結](https://www.ibm.com/docs/en/announcements/magnetic-tape-subsystem-model-a11) |
+| 3401-A00 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-A01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-A02 | 2016-07-01 | 2016-07-15 | 2018-06-12 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-M00 | 2016-07-01 | 2016-07-15 | 2016-10-25 | 2025-12-31 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-M01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-S00 | 2016-07-01 | 2016-07-15 | 2017-05-12 | 2021-05-31 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-S01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-S02 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-S03 | 2016-07-01 | 2016-07-15 | 2021-05-09 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3401-S10 | 2017-04-11 | 2017-04-21 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware) |
+| 3403-A00 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-A01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-A02 | 2016-07-01 | 2016-07-15 | 2018-06-12 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-M00 | 2016-07-01 | 2016-07-15 | 2016-10-25 | 2024-12-31 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-M01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-S00 | 2016-07-01 | 2016-07-15 | 2017-05-12 | 2021-05-31 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-S01 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-S02 | 2016-07-01 | 2016-07-15 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-S03 | 2016-07-01 | 2016-07-15 | 2021-05-09 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
+| 3403-S10 | 2017-04-11 | 2017-04-21 | 2020-04-28 | 2024-06-30 | true | true | false | [連結](https://www.ibm.com/docs/en/announcements/cloud-object-storage-system-hardware-2023-01-31) |
