@@ -43,6 +43,13 @@ async function runAuditReport() {
 
     for (const targetModel of allModels) {
         console.log(`\n[INIT] 啟動 ${targetModel} 稽核任務 (優化模式: 尋獲即止)...`);
+        
+        // [穩定性修復] 檢查瀏覽器連線狀態
+        if (!browser.connected) {
+            console.error(`[FATAL] 瀏覽器連線已中斷，停止任務。`);
+            break;
+        }
+
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(90000); 
         let finalResult = null;
@@ -57,7 +64,7 @@ async function runAuditReport() {
                 await page.waitForSelector('.accordion-blue-title', { timeout: 45000 });
             } catch (e) {
                 console.error(`[FAIL] 搜尋結果超時或無結果 (Model: ${targetModel})`);
-                await page.close();
+                await page.close().catch(() => {});
                 continue;
             }
 
@@ -78,7 +85,6 @@ async function runAuditReport() {
             for (const res of searchResults) {
                 const detailPage = await browser.newPage();
                 try {
-                    // [優化] 雙錨點切換與重試機制 (1次為限)
                     let auditUrl = `${res.href}#h2-smlcg`;
                     await detailPage.goto(auditUrl, { waitUntil: 'networkidle2', timeout: 60000 });
 
@@ -99,7 +105,6 @@ async function runAuditReport() {
                         const smPass = hasLabel || hasJsonLabel;
                         let lifecycle = null;
 
-                        // [優化選擇器] 軌道 A: 現代 Table (優先尋找 ID，若無 ID 則尋找包含 Type Model 的 table)
                         let table = document.querySelector('table[id="smlcg__lcg"]');
                         if (!table) {
                             table = Array.from(document.querySelectorAll('table')).find(t => t.innerText.includes('Type Model'));
@@ -142,13 +147,16 @@ async function runAuditReport() {
                             'Status': '✅ PASS'
                         };
                         console.log(`[SUCCESS] 已找到精準匹配項目。`);
-                        await detailPage.close();
+                        await detailPage.close().catch(() => {});
                         break; 
                     }
                 } catch (e) {
                     console.error(`[ERR] 處理頁面異常: ${res.title}`);
                 } finally {
-                    if (!detailPage.isClosed()) await detailPage.close();
+                    // [修復崩潰錯誤] 加入防禦性關閉判斷
+                    if (detailPage && !detailPage.isClosed()) {
+                        await detailPage.close().catch(() => {});
+                    }
                 }
             }
 
@@ -162,7 +170,10 @@ async function runAuditReport() {
         } catch (err) {
             console.error(`[FATAL] 稽核崩潰: ${err.message}`);
         } finally {
-            await page.close();
+            // [修復崩潰錯誤] 加入防禦性關閉判斷
+            if (page && !page.isClosed()) {
+                await page.close().catch(() => {});
+            }
         }
     }
 
@@ -172,7 +183,11 @@ async function runAuditReport() {
     fs.writeFileSync('readme.md', `# IBM Lifecycle Audit Report\n\nGenerated at: ${new Date().toLocaleString()}\n\n${mdHeader}${mdRows}`);
     
     console.log(`\n[FINISH] 報表已寫入 readme.md`);
-    await browser.close();
+    
+    // [修復崩潰錯誤] 確保瀏覽器存在才關閉
+    if (browser && browser.connected) {
+        await browser.close();
+    }
 }
 
 runAuditReport();
