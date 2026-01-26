@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 async function exportRawDataWithRetry() {
-    const targetUrl = 'https://www.ibm.com/docs/en/announcements/power-e1080-enterprise-server#h2-smlcg';
+    const targetUrl = 'https://www.ibm.com/docs/en/announcements/disk-array-subsystem-model-480?region=AP#h2-smlcg';
     let browser;
     
     try {

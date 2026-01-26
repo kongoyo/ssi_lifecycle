@@ -1,6 +1,6 @@
 /**
  * ==============================================================================
- * [SRE] IBM Lifecycle 稽核報表系統 (Early Exit & Self-Healing & Persistence)
+ * [SRE] IBM Lifecycle 稽核報表系統 (Early Exit & Self-Healing & Checkpoint)
  * ==============================================================================
  */
 
@@ -45,11 +45,9 @@ async function runAuditReport() {
             if (line.includes('|') && !line.includes('Model') && !line.includes('---')) {
                 const parts = line.split('|').map(p => p.trim());
                 if (parts[1]) {
-                    // 僅 ✅ PASS 被視為完成，下次跳過
                     if (line.includes('✅ PASS')) {
                         finishedModels.add(parts[1]);
                     }
-                    // 將所有記錄（含 FAIL）恢復到陣列中，維持報表完整性
                     finalSummary.push({
                         'Model': parts[1],
                         'Announced': parts[2],
@@ -74,7 +72,6 @@ async function runAuditReport() {
     let browser = await launchBrowser();
 
     for (const targetModel of allModels) {
-        // [斷點續傳] 跳過已 PASS 項目
         if (finishedModels.has(targetModel)) continue;
 
         if (!browser.connected) {
@@ -140,12 +137,23 @@ async function runAuditReport() {
                             }
 
                             if (table) {
-                                const trs = Array.from(table.querySelectorAll('tr'));
-                                for (let tr of trs) {
-                                    const cells = Array.from(tr.querySelectorAll('td')).map(c => c.innerText.trim());
+                                // [優化] 優先尋找 data-hd-audience="AP" 的項目
+                                let targetTr = table.querySelector(`tr[data-hd-audience="AP"]`);
+                                
+                                // 如果沒有明確標記 AP，則回退到遍歷模式尋找匹配型號
+                                if (!targetTr) {
+                                    const trs = Array.from(table.querySelectorAll('tr'));
+                                    targetTr = trs.find(tr => {
+                                        const firstCell = tr.querySelector('td');
+                                        return firstCell && firstCell.innerText.trim() === target;
+                                    });
+                                }
+
+                                if (targetTr) {
+                                    const cells = Array.from(targetTr.querySelectorAll('td')).map(c => c.innerText.trim());
+                                    // 確保第一欄符合型號
                                     if (cells[0] === target) {
                                         lifecycle = { model: cells[0], ann: cells[1], avl: cells[2], wdr: cells[3], dsc: cells[4] };
-                                        break;
                                     }
                                 }
                             }
@@ -173,7 +181,7 @@ async function runAuditReport() {
                                 'Discontinued': toISODate(audit.lifecycle.dsc),
                                 'Status': '✅ PASS'
                             };
-                            console.log(`[SUCCESS] 已找到精準匹配項目。`);
+                            console.log(`[SUCCESS] 已找到精準匹配項目 (AP 優先模式)。`);
                             await detailPage.close().catch(() => {});
                             break; 
                         }
@@ -185,12 +193,10 @@ async function runAuditReport() {
                 }
             }
 
-            // [斷點續傳] 更新結果陣列並寫入硬碟
             if (!finalResult) {
                 finalResult = { 'Model': targetModel, 'Announced': '-', 'Available': '-', 'Withdrawn': '-', 'Discontinued': '-', 'Status': '❌ FAIL' };
             }
 
-            // 若原本已有 FAIL 記錄，先移除舊的再推入新的
             finalSummary = finalSummary.filter(item => item.Model !== targetModel);
             finalSummary.push(finalResult);
             console.table([finalResult]);
