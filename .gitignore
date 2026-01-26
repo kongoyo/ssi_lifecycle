@@ -10,7 +10,6 @@ ssi_lifecycle1(OK).py
 ssi_lifecycle1(多線程OK).py
 test.yaml
 debug_puppeteer copy.js
-debug_puppeteer.js
 debug_scraper1.py
 debug_scrapy.py
 debug_search_error.png
@@ -4391,3 +4390,6 @@ design.txt
 debug_dump/3480-A11_extract_fail_1769341157980.txt
 debug_dump/3480-A11_extract_fail_1769341162944.txt
 debug_dump/3403-S00_parse_fail_2026-01-25T11-48-52-227Z.txt
+debug_puppeteer copy 2.js
+raw_full_inner_html.html
+raw_inner_text.txt
