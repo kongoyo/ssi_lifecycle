@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
 WORKDIR /app
 
 # Install Python requirements
-COPY requirements.txt .
+COPY .github/workflows/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install specific playwright browser instance
