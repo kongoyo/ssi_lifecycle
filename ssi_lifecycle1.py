@@ -325,72 +325,103 @@ class IBMLifecycleParallelSRE:
             
             with open(yaml_file, 'r', encoding='utf-8') as f:
                 raw_models = yaml.safe_load(f).get('models', [])
-                models = [str(m) for m in raw_models]
-
-            current_file_results = []
-            with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-                future_to_model = {
-                    executor.submit(self.fetch_model_data, m, clean_title): m 
-                    for m in models
-                }
-                for future in as_completed(future_to_model):
-                    current_file_results.append(future.result())
             
-            current_file_results.sort(key=lambda x: str(x['Model']).replace(" (Retry)", ""))
-            self.display(clean_title, current_file_results)
-            self.write_to_readme(clean_title, current_file_results, i == 0)
+            groups = []
+            current_group_name = "Uncategorized"
+            current_models = []
+            
+            for m in raw_models:
+                m_str = str(m)
+                # 判斷是否為群組名稱（沒有破折號且長度較短的通常是群組名稱，例如 Power11）
+                if "-" not in m_str and (m_str.startswith("Power") or len(m_str) < 10 and not m_str.isdigit()):
+                    if current_models:
+                        groups.append((current_group_name, current_models))
+                        current_models = []
+                    current_group_name = m_str
+                else:
+                    current_models.append(m_str)
+                    
+            if current_models:
+                groups.append((current_group_name, current_models))
 
-    def write_to_readme(self, title, results, is_first_file):
-        """ 仿照 kongoyo/ssi-life-cycle-dates 的極簡 Markdown 格式 """
+            with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                final_grouped_results = []
+                for group_name, models in groups:
+                    future_to_model = {
+                        executor.submit(self.fetch_model_data, m, clean_title): m 
+                        for m in models
+                    }
+                    group_results = []
+                    for future in as_completed(future_to_model):
+                        group_results.append(future.result())
+                    
+                    # 按照前四碼數字排序，如果沒有前四碼數字則用整數名稱排序
+                    group_results.sort(key=lambda x: str(x['Model']).replace(" (Retry)", "")[:4])
+                    final_grouped_results.append((group_name, group_results))
+            
+            self.display(clean_title, final_grouped_results)
+            self.write_to_readme(clean_title, final_grouped_results, i == 0)
+
+    def write_to_readme(self, title, grouped_results, is_first_file):
+        """ 仿照 kongoyo/ssi-life-cycle-dates 的極簡 Markdown 格式，加上群組處理 """
         
-        # 1. 數據清洗：輸出前將 N/A 或 Full Miss 轉為 '-' 增加視覺整潔度
-        clean_results = []
-        for r in results:
-            row = {
-                "Model": r.get("Model", "-"),
-                "Announced": r.get("Announced") if r.get("Announced") not in ["N/A", "Full Miss", "Error"] else "-",
-                "Available": r.get("Available") if r.get("Available") not in ["N/A", "Full Miss", "Error"] else "-",
-                "Withdrawn": r.get("Withdrawn") if r.get("Withdrawn") not in ["N/A", "Full Miss", "Error"] else "-",
-                "Discontinued": r.get("Discontinued") if r.get("Discontinued") not in ["N/A", "Full Miss", "Error"] else "-"
-            }
-            clean_results.append(row)
+        md_content = ""
+        for group_name, results in grouped_results:
+            clean_results = []
+            for r in results:
+                row = {
+                    "Model": r.get("Model", "-"),
+                    "Announced": r.get("Announced") if r.get("Announced") not in ["N/A", "Full Miss", "Error"] else "-",
+                    "Available": r.get("Available") if r.get("Available") not in ["N/A", "Full Miss", "Error"] else "-",
+                    "Withdrawn": r.get("Withdrawn") if r.get("Withdrawn") not in ["N/A", "Full Miss", "Error"] else "-",
+                    "Discontinued": r.get("Discontinued") if r.get("Discontinued") not in ["N/A", "Full Miss", "Error"] else "-"
+                }
+                clean_results.append(row)
 
-        # 2. 構建表格字串 (緊湊型，無多餘空格)
-        md_table = f"## {title}\n\n"
-        md_table += "| Model | Announced | Available | Withdrawn | Discontinued |\n"
-        md_table += "|-------|-----------|-----------|-----------|--------------|\n"
+            # 構建表格字串 (緊湊型，無多餘空格)
+            md_content += f"## {group_name}\n\n"
+            md_content += "| Model | Announced | Available | Withdrawn | Discontinued |\n"
+            md_content += "|-------|-----------|-----------|-----------|--------------|\n"
 
-        for r in clean_results:
-            md_table += f"| {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['Discontinued']} |\n"
-        md_table += "\n"
+            for r in clean_results:
+                md_content += f"| {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['Discontinued']} |\n"
+            md_content += "\n"
 
         # 3. 檔案寫入邏輯
         mode = 'w' if is_first_file else 'a'
         with open('readme.md', mode, encoding='utf-8') as f:
             if is_first_file:
-                # 寫入主標題與生成日期 (符合 SRE 規範)
+                # 寫入主標題與生成日期 (符合 SRE 規範)，省略了原先的 `## Test` 標題
                 f.write("# IBM Hardware Lifecycle Dates\n\n")
                 f.write(f"> Last Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            f.write(md_table)
+            f.write(md_content)
             
         logger.info(f"報表格式已更新至 readme.md ({title})")
 
-    def display(self, title, results):
-        print(f"\n## {title} (Parallel Mode)\n")
-        m_width = max([len(str(r['Model'])) for r in results] + [12])
-        header_str = f"{'Model':<{m_width}} | {'Announced':<12} | {'Available':<12} | {'Withdrawn':<12} | {'Discontinued'}"
+    def display(self, title, grouped_results):
+        print(f"\n# IBM Hardware Lifecycle Dates (Parallel Mode)\n")
         
-        print("=" * len(header_str))
-        print(header_str)
-        print("-" * len(header_str))
-        for r in results:
-            m = f"{r['Model']:<{m_width}}"
-            ann = f"{r.get('Announced','-'):<12}"
-            ava = f"{r.get('Available','-'):<12}"
-            wit = f"{r.get('Withdrawn','-'):<12}"
-            dis = f"{r.get('Discontinued','-')}"
-            print(f"{m} | {ann} | {ava} | {wit} | {dis}")
-        print("=" * len(header_str))
+        for group_name, results in grouped_results:
+            print(f"\n## {group_name}\n")
+            
+            # 安全防護：若沒有 results，不要做 max() 運算
+            if not results:
+                continue
+
+            m_width = max([len(str(r['Model'])) for r in results] + [12])
+            header_str = f"{'Model':<{m_width}} | {'Announced':<12} | {'Available':<12} | {'Withdrawn':<12} | {'Discontinued'}"
+            
+            print("=" * len(header_str))
+            print(header_str)
+            print("-" * len(header_str))
+            for r in results:
+                m = f"{r['Model']:<{m_width}}"
+                ann = f"{r.get('Announced','-'):<12}"
+                ava = f"{r.get('Available','-'):<12}"
+                wit = f"{r.get('Withdrawn','-'):<12}"
+                dis = f"{r.get('Discontinued','-')}"
+                print(f"{m} | {ann} | {ava} | {wit} | {dis}")
+            print("=" * len(header_str))
 
 if __name__ == "__main__":
     lifecycle = IBMLifecycleParallelSRE(max_workers=3)
