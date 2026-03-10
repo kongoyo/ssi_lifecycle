@@ -2,6 +2,7 @@ displayName: Test
 enabled: true
 models:
     - Power11
+    - 9043-MRU
     - 9080-HEU
     - 9824-22A
     - 9824-42A
