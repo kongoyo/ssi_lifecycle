@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-03 14:59:53
+**Generated:** 2026-05-03 15:34:12
 
 ## Power11
 
@@ -93,4 +93,26 @@
 | Model | Announced | Available | Withdrawn | Discontinued | Source |
 |-------|-----------|-----------|-----------|--------------|--------|
 | 8969-F24 | 2022-05-24 | 2022-06-03 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san24b-6) |
+
+## TS2290
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 3580-H9S | 2021-11-23 | 2021-12-03 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/ts2290-sas-tape-drive-model-h9s) |
+
+## TS2230
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 3580-S3V | 2018-01-17 | 2018-01-17 | N/A | N/A | [Link](https://www.ibm.com/support/pages/lifecycle/) |
+
+## TS3580
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 3580-L33 | 2004-12-17 | 2005-02-25 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/archive/ENUSA04-1550) |
+| 3580-H23 | 2003-01-28 | 2003-02-14 | 2006-06-16 | 2022-12-31 | [Link](https://www.ibm.com/docs/en/announcements/totalstorage-ultrium-tape-drive) |
+| 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/totalstorage-ultrium-tape-drive) |
+| 3580-H13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2013-12-31 | [Link](https://www.ibm.com/docs/en/announcements/ultrium-tape-drive) |
+| 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2013-12-31 | [Link](https://www.ibm.com/docs/en/announcements/ultrium-tape-drive) |
 
