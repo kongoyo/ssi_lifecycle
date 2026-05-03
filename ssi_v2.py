@@ -292,25 +292,30 @@ class IBMLifecycleHarness:
                                     }
                                 """)
                                 
-                                # 尋找型號附近的日期 (距離 800 字元內)
-                                model_pos = page_text.upper().find(model_full)
-                                if model_pos == -1: model_pos = page_text.upper().find(model_clean)
+                                # 尋找型號附近的日期 (多錨點掃描)
+                                anchors = [model_full, model_clean, "PLANNED AVAILABILITY DATE", "ANNOUNCEMENT DATE", "WITHDRAWAL DATE"]
+                                found_dates = []
                                 
-                                if model_pos != -1:
-                                    snippet = page_text[model_pos : model_pos + 1200] # 取後方 1200 字元
-                                    dates = re.findall(r'(\d{4}-\d{2}-\d{2})|(\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4})', snippet)
-                                    if dates:
-                                        flat_dates = []
+                                for anchor in anchors:
+                                    pos = page_text.upper().find(anchor)
+                                    if pos != -1:
+                                        # 取前後各 1000 字元的片段
+                                        start = max(0, pos - 200)
+                                        snippet = page_text[start : pos + 1500]
+                                        dates = re.findall(r'(\d{4}-\d{2}-\d{2})|([A-Za-z]+\s+\d{1,2},\s+\d{4})|(\d{1,2}\s+[A-Za-z]+\s+\d{4})', snippet)
                                         for d_tuple in dates:
-                                            d_str = d_tuple[0] or d_tuple[1]
+                                            d_str = d_tuple[0] or d_tuple[1] or d_tuple[2]
                                             norm = self.normalize_date(d_str)
-                                            if norm != "N/A": flat_dates.append(norm)
-                                        
-                                        if len(flat_dates) >= 2:
-                                            final_res["Announced"] = flat_dates[0]
-                                            final_res["Available"] = flat_dates[1]
-                                            final_res["Url"] = full_url
-                                            print(f"    [DATA] 深度文本正則提取成功: {flat_dates[:2]}")
+                                            if norm != "N/A" and norm not in found_dates:
+                                                found_dates.append(norm)
+                                
+                                if len(found_dates) >= 2:
+                                    # 簡單排序：最早的是 Announced, 稍晚的是 Available
+                                    sorted_dates = sorted(found_dates)
+                                    final_res["Announced"] = sorted_dates[0]
+                                    final_res["Available"] = sorted_dates[1]
+                                    final_res["Url"] = full_url
+                                    print(f"    [DATA] 多錨點文本提取成功: {sorted_dates[:2]}")
                             except Exception as e:
                                 print(f"    [TRACE] 深度文本提取失敗: {e}")
                                 pass
