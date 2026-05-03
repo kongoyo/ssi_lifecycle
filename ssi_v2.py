@@ -216,7 +216,9 @@ class IBMLifecycleHarness:
                             try:
                                 for r in rows[:3]:
                                     text = r.inner_text().upper()
-                                    if any(k in text for k in ["MODEL", "ANNOUNCED", "AVAILABLE", "WITHDRAWN", "DISCONTINUED", "SUPPORT"]):
+                                    if any(k in text for k in ["MODEL", "ANNOUNCED", "AVAILABLE", "WITHDRAWN", "DISCONTINUED"]):
+                                        # 排除 Support Level Changed (這不是真正的 Discontinued)
+                                        if "SUPPORT LEVEL" in text: continue
                                         h_cells = r.locator("th, td").all()
                                         headers = [h.inner_text().strip().upper() for h in h_cells]
                                         break
@@ -241,7 +243,7 @@ class IBMLifecycleHarness:
                                                 if "ANNOUNCED" in h or "ANNOUNCE" in h: current_cand_res["Announced"] = val
                                                 elif "AVAILABLE" in h or "AVAILABILITY" in h: current_cand_res["Available"] = val
                                                 elif "WITHDRAWN" in h or "WITHDRAWAL" in h: current_cand_res["Withdrawn"] = val
-                                                elif "DISCONTINUED" in h or "DISCONTINUANCE" in h or "EOS" in h or "SUPPORT" in h or "SERVICE DISCONTINUED" in h or "LEVEL CHANGED" in h: 
+                                                elif "DISCONTINUED" in h or "DISCONTINUANCE" in h or "EOS" in h or "SERVICE DISCONTINUED" in h: 
                                                     current_cand_res["Discontinued"] = val
                                         
                                         # 靜態索引兜底
@@ -305,6 +307,12 @@ class IBMLifecycleHarness:
                                         dates = re.findall(r'(\d{4}-\d{2}-\d{2})|([A-Za-z]+\s+\d{1,2},\s+\d{4})|(\d{1,2}\s+[A-Za-z]+\s+\d{4})', snippet)
                                         for d_tuple in dates:
                                             d_str = d_tuple[0] or d_tuple[1] or d_tuple[2]
+                                            # 檢查日期周圍是否有 Support level changed 關鍵字
+                                            date_pos = snippet.find(d_str)
+                                            context_before = snippet[max(0, date_pos-50):date_pos].upper()
+                                            if "SUPPORT LEVEL" in context_before or "LEVEL CHANGED" in context_before:
+                                                continue
+                                                
                                             norm = self.normalize_date(d_str)
                                             if norm != "N/A" and norm not in found_dates:
                                                 found_dates.append(norm)
