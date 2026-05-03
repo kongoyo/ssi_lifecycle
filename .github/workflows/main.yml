@@ -25,10 +25,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r .github/workflows/requirements.txt
-          playwright install chromium
+          playwright install --with-deps chromium
 
       - name: Run Scraper
-        run: python ssi_v2.py
+        # 使用 -u 強制即時輸出，避免 GitHub Actions 緩衝導致看起來卡住
+        run: python -u ssi_v2.py
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
