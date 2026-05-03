@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-03 14:15:13
+**Generated:** 2026-05-03 14:59:53
 
 ## Power11
 
@@ -78,4 +78,19 @@
 | 2145-SV3 | 2022-02-08 | 2022-03-04 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-model-sv3-2023-10-10) |
 | 2145-SV2 | 2020-02-11 | 2020-03-06 | 2023-01-28 | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-models-sa2-sv2) |
 | 2145-SV1 | 2016-08-23 | 2016-09-09 | 2021-10-12 | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-model-sv1) |
+
+## SAN64B-6
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 8960-F64 | 2016-10-11 | 2016-11-11 | 2023-02-28 | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san64b-6) |
+| 8960-F65 | 2020-10-13 | 2020-11-20 | 2024-12-31 | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san64b-6-2023-10-10) |
+| 8960-N64 | 2016-10-11 | 2016-11-11 | 2023-09-12 | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san64b-6) |
+| 8960-N65 | 2020-10-13 | 2020-11-20 | 2024-12-31 | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san64b-6-2023-10-10) |
+
+## SAN24B-6
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 8969-F24 | 2022-05-24 | 2022-06-03 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/storage-networking-san24b-6) |
 
