@@ -13,4 +13,4 @@ RUN playwright install chromium
 COPY . .
 
 # Run the python script
-CMD ["python", "ssi_lifecycle1.py"]
+CMD ["python", "ssi_v2.py"]

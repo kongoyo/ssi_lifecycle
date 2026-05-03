@@ -2,28 +2,36 @@ name: Auto Update IBM Lifecycle
 
 on:
   schedule:
-    - cron: '37 11 * * 3'
+    - cron: '0 0 * * 1' # 每週一執行
   workflow_dispatch:
 
 jobs:
-  build-and-update:
+  update-lifecycle:
     runs-on: ubuntu-latest
     permissions:
-      contents: write    # 重要：賦予寫入 README 的權限
+      contents: write
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build and Run Scraper
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: '.github/workflows/requirements.txt'
+
+      - name: Install dependencies
         run: |
-          docker build -t ibm-scraper .
-          docker run --name scraper-container ibm-scraper
-          # 將容器內更新後的 readme.md 複製出來
-          docker cp scraper-container:/app/readme.md ./readme.md
+          pip install -r .github/workflows/requirements.txt
+          playwright install chromium
+
+      - name: Run Scraper
+        run: python ssi_v2.py
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "docs: 自動更新 IBM 生命週期表 [skip ci]"
+          commit_message: "docs: 自動更新 IBM 生命週期表 (AP Region) [skip ci]"
           file_pattern: 'readme.md'

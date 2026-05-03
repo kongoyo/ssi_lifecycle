@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.db
+.DS_Store
+*.bak
+debug_*.yaml
+readme.md
