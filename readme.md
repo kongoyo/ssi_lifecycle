@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-03 21:47:03
+**Generated:** 2026-05-03 14:15:13
 
 ## Power11
 
@@ -70,4 +70,12 @@
 | 9406-520 | 2004-05-04 | 2004-06-11 | 2008-07-08 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/eserver-i5-model-520) |
 | 9406-525 | 2007-04-10 | 2007-04-20 | 2009-01-01 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/9406-model-525) |
 | 9407-515 | 2007-04-10 | 2007-04-20 | 2009-01-01 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/9407-model-515) |
+
+## SVC
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 2145-SV3 | 2022-02-08 | 2022-03-04 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-model-sv3-2023-10-10) |
+| 2145-SV2 | 2020-02-11 | 2020-03-06 | 2023-01-28 | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-models-sa2-sv2) |
+| 2145-SV1 | 2016-08-23 | 2016-09-09 | 2021-10-12 | N/A | [Link](https://www.ibm.com/docs/en/announcements/san-volume-controller-model-sv1) |
 
