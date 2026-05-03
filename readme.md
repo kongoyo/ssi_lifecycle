@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-03 13:33:49
+**Generated:** 2026-05-03 06:20:15
 
 ## Power11
 
@@ -37,7 +37,7 @@
 | 9009-22G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s922-9009-22g) |
 | 9009-22A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-s922-9009-22a) |
 | 9080-M9S | 2018-08-07 | 2018-09-21 | 2022-10-31 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-e980-9080-m9s) |
-| 9223-42S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-9223-42s-2023-10-24) |
+| 9223-42S | 2020-11-20 | 2020-11-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/lifecycle/) |
 | 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-sap-hana-9223-42h) |
 | 9223-22S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h922-9223-22s-2023-10-24) |
 | 9223-22H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-h922-sap-hana-9223-22h) |
