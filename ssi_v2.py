@@ -99,307 +99,274 @@ class IBMLifecycleHarness:
         search_parts = model.split('-')
         search_query = "+".join(search_parts) if len(search_parts) > 1 else model
         
-        final_res = {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "Discontinued": "N/A", "Url": "-"}
+        final_res = {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
         
-        # 跨類別搜尋迴圈 (Sales Manual 與 Announcement Letters 是互斥的)
-        for s_type in ["salesmanual", "announcement"]:
-            if final_res["Announced"] != "N/A" and final_res["Available"] != "N/A":
-                break
-                
-            search_url = f"https://www.ibm.com/docs/en/search/{search_query}?type={s_type}"
-            print(f"  [SEARCH] 類別: {s_type} | 策略: {search_query}")
-            
-            for attempt in range(2):
-                try:
-                    page.goto(search_url, wait_until="domcontentloaded", timeout=60000)
-                    try: page.wait_for_selector("h3.dw-search-result-title, .dw-search-result-title", timeout=10000)
-                    except: pass
-                    page.wait_for_timeout(3000)
+        # (3) 第一優先查詢: IBM Support Lifecycle (DataTables)
+        print(f"  [STEP 1] 啟動第一優先查詢: IBM Support Lifecycle")
+        support_res = self._search_support_lifecycle(model, page)
+        for k, v in support_res.items():
+            if v != "N/A":
+                final_res[k] = v
+        if support_res.get("Url") != "N/A":
+            final_res["Url"] = support_res["Url"]
+        elif any(v != "N/A" for k, v in support_res.items() if k != "Url"):
+            final_res["Url"] = "https://www.ibm.com/support/pages/lifecycle/"
+        
+        # (1) & (2) 次要與補充查詢: IBM Docs (Sales Manual / Announcement)
+        if final_res["Announced"] == "N/A" or final_res["Available"] == "N/A" or final_res["Withdrawn"] == "N/A" or final_res["EOS_Std"] == "N/A":
+            print(f"  [STEP 2] 資料尚有缺失，啟動次要查詢: IBM Docs")
+            for s_type in ["salesmanual", "announcement"]:
+                # 如果核心資料已齊備，則提早結束
+                if final_res["Announced"] != "N/A" and final_res["Available"] != "N/A" and final_res["Withdrawn"] != "N/A" and final_res["EOS_Std"] != "N/A":
                     break
-                except Exception as e:
-                    if attempt == 0:
-                        page.wait_for_timeout(5000)
-                    else:
-                        print(f"  [ERROR] 搜尋頁面加載失敗: {e}")
-                        continue
-
-            try:
-                all_links = page.locator("a").all()
-                if len(all_links) < 15: continue
+                    
+                search_url = f"https://www.ibm.com/docs/en/search/{search_query}?type={s_type}"
+                print(f"    [SEARCH] 類別: {s_type} | 策略: {search_query}")
                 
-                candidates = []
-                prefix = model.split('-')[0]
-                model_full = model.upper()
-                model_clean = model.replace("-", "").upper()
-                
-                for i, link in enumerate(all_links):
+                for attempt in range(2):
                     try:
-                        title = link.inner_text().strip()
-                        href = link.get_attribute("href")
-                        if not href: continue
-                        
-                        if "/announcements/" in href or "salesmanual" in href.lower() or "announcement" in href.lower():
-                            if model_full in title.upper() or model_clean in title.upper():
-                                candidates.append({"title": title, "url": href})
-                            elif prefix.upper() in title.upper() and len(title) > 5:
-                                candidates.append({"title": title, "url": href})
-                    except: continue
+                        page.goto(search_url, wait_until="domcontentloaded", timeout=60000)
+                        try: page.wait_for_selector("h3.dw-search-result-title, .dw-search-result-title", timeout=10000)
+                        except: pass
+                        page.wait_for_timeout(3000)
+                        break
+                    except Exception as e:
+                        if attempt == 0:
+                            page.wait_for_timeout(5000)
+                        else:
+                            print(f"    [ERROR] 搜尋頁面加載失敗: {e}")
+                            continue
 
-                # 去重
-                seen_urls = set()
-                unique_candidates = []
-                for c in candidates:
-                    if c['url'] not in seen_urls:
-                        unique_candidates.append(c)
-                        seen_urls.add(c['url'])
-                candidates = unique_candidates
-
-                if not candidates:
-                    # 兜底：嘗試抓取前幾個可能相關的連結
-                    for link in all_links:
+                try:
+                    all_links = page.locator("a").all()
+                    if len(all_links) < 15: continue
+                    
+                    candidates = []
+                    prefix = model.split('-')[0]
+                    model_full = model.upper()
+                    model_clean = model.replace("-", "").upper()
+                    
+                    for i, link in enumerate(all_links):
                         try:
-                            href = link.get_attribute("href")
                             title = link.inner_text().strip()
-                            if href and "/announcements/" in href and len(title) > 10:
-                                candidates.append({"title": title, "url": href})
-                                if len(candidates) >= 2: break
+                            href = link.get_attribute("href")
+                            if not href: continue
+                            
+                            if "/announcements/" in href or "salesmanual" in href.lower() or "announcement" in href.lower():
+                                if model_full in title.upper() or model_clean in title.upper():
+                                    candidates.append({"title": title, "url": href})
+                                elif prefix.upper() in title.upper() and len(title) > 5:
+                                    candidates.append({"title": title, "url": href})
                         except: continue
 
-                # 優先級排序：完全匹配型號的排在前面
-                candidates.sort(key=lambda x: 1 if (model_full in x['title'].upper() or model_clean in x['title'].upper()) else 2)
-                
-                for cand in candidates[:8]:
-                    full_url = cand['url']
-                    if full_url.startswith('/'):
-                        full_url = "https://www.ibm.com" + full_url
-                    
-                    print(f"  [TRACE] 檢查候選公告 ({s_type}): {cand['title']}")
-                    
-                    # [優化] 排除顯然不是該型號主體的頁面 (例如 Upgrade/Conversion 頁面)
-                    bad_keywords = ["CONVERSION", "UPGRADE", "FROM ", "TO ", "REPLACEMENT"]
-                    if any(k in cand['title'].upper() for k in bad_keywords):
-                        # 如果標題同時包含目標型號與另一個型號，且包含 bad keywords，則降低優先級或跳過
-                        print(f"    [SKIP] 候選標題包含疑似非主體關鍵字: {cand['title']}")
-                        continue
+                    # 去重
+                    seen_urls = set()
+                    unique_candidates = []
+                    for c in candidates:
+                        if c['url'] not in seen_urls:
+                            unique_candidates.append(c)
+                            seen_urls.add(c['url'])
+                    candidates = unique_candidates
 
-                    try:
-                        page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
-                        
-                        # [優化] 驗證頁面主體 (H1) 是否包含目標型號
-                        try:
-                            h1_text = page.locator("h1").first.inner_text().upper()
-                            if model_full not in h1_text and model_clean not in h1_text:
-                                print(f"    [WARN] 頁面 H1 不包含目標型號: {h1_text}")
-                                # 如果是 Sales Manual 且 H1 沒匹配，通常是正確的產品頁面，但 Announcement 則需嚴格
-                                if s_type == "announcement":
-                                    continue
-                        except: pass
-
-                        # 核心優化：嘗試切換至 AP 地區以確保數據一致性 (強制要求 AP)
-                        is_ap = False
-                        ap_indicators = ["ASIA PACIFIC", "AP", "JAPAN", "AUSTRALIA", "CHINA", "KOREA", "INDIA", "ASEAN"]
-                        
-                        try:
-                            # 檢查目前頁面是否已是 AP 地區 (透過麵包屑或中繼資料)
-                            page_content = page.content().upper()
-                            if any(ind in page_content for ind in ap_indicators):
-                                is_ap = True
-                            
-                            if not is_ap:
-                                # 尋找地區選擇器 (IBM Docs 常見模式)
-                                region_btn = page.locator("button.dw-region-selector-button, .region-selector").first
-                                if region_btn.is_visible():
-                                    region_btn.click()
-                                    # 優先尋找 AP 或 Asia Pacific
-                                    ap_opt = page.locator("text=Asia Pacific, text=AP, text=Japan").first
-                                    if ap_opt.is_visible():
-                                        ap_opt.click()
-                                        page.wait_for_timeout(2000)
-                                        is_ap = True
-                        except: pass
-
-                        # 如果最終無法確認是 AP 且用戶強制要求，則標註或跳過
-                        # 在此我們先繼續，但後續提取會優先標註 AP 來源
-
-                        # 自動滾動以觸發動態加載 (Shadow DOM / Lazy Load)
-                        page.evaluate("window.scrollTo(0, document.body.scrollHeight/2)")
-                        page.wait_for_timeout(1000)
-                        page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                        
-                        # 核心修復：等待 Shadow DOM 水合 (Hydration)
-                        # 等待頁面出現日期模式 (YYYY-MM-DD 或 Month DD, YYYY)
-                        try:
-                            page.wait_for_function("""
-                                () => {
-                                    const text = document.body.innerTextContent || document.body.innerText;
-                                    return /\\d{4}-\\d{2}-\\d{2}|[A-Za-z]+\\s+\\d{1,2},\\s+\\d{4}|\\d{1,2}\\s+[A-Za-z]+\\s+\\d{4}/.test(text);
-                                }
-                            """, timeout=8000)
-                        except:
-                            print(f"    [TRACE] 等待水合超時，嘗試強制提取...")
-                        
-                        page.wait_for_timeout(2000)
-                        
-                        try: page.wait_for_selector("table", timeout=5000)
-                        except: pass
-                        
-                        content_upper = page.content().upper()
-                        
-                        # 檢查頁面內容是否包含型號與關鍵字
-                        if model_full not in content_upper and model_clean not in content_upper:
-                            if model_full not in cand['title'].upper() and model_clean not in cand['title'].upper():
-                                continue
-
-                        tables = page.locator("table").all()
-                        for table_idx, table in enumerate(tables):
-                            rows = table.locator("tr").all()
-                            if not rows: continue
-                            
-                            headers = []
+                    if not candidates:
+                        # 兜底：嘗試抓取前幾個可能相關的連結
+                        for link in all_links:
                             try:
-                                for r in rows[:3]:
-                                    text = r.inner_text().upper()
-                                    if any(k in text for k in ["MODEL", "ANNOUNCED", "AVAILABLE", "WITHDRAWN", "DISCONTINUED"]):
-                                        # 排除 Support Level Changed (這不是真正的 Discontinued)
-                                        if "SUPPORT LEVEL" in text: continue
-                                        h_cells = r.locator("th, td").all()
-                                        headers = [h.inner_text().strip().upper() for h in h_cells]
-                                        break
-                                if not headers:
-                                    h_cells = rows[0].locator("th, td").all()
-                                    headers = [h.inner_text().strip().upper() for h in h_cells]
+                                href = link.get_attribute("href")
+                                title = link.inner_text().strip()
+                                if href and "/announcements/" in href and len(title) > 10:
+                                    candidates.append({"title": title, "url": href})
+                                    if len(candidates) >= 2: break
+                            except: continue
+
+                    # 優先級排序：完全匹配型號的排在前面
+                    candidates.sort(key=lambda x: 1 if (model_full in x['title'].upper() or model_clean in x['title'].upper()) else 2)
+                    
+                    for cand in candidates[:8]:
+                        full_url = cand['url']
+                        if full_url.startswith('/'):
+                            full_url = "https://www.ibm.com" + full_url
+                        
+                        print(f"      [TRACE] 檢查候選公告 ({s_type}): {cand['title']}")
+                        
+                        # [優化] 排除顯然不是該型號主體的頁面
+                        bad_keywords = ["CONVERSION", "UPGRADE", "FROM ", "TO ", "REPLACEMENT"]
+                        if any(k in cand['title'].upper() for k in bad_keywords):
+                            print(f"        [SKIP] 候選標題包含疑似非主體關鍵字: {cand['title']}")
+                            continue
+
+                        try:
+                            page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
+                            
+                            try:
+                                h1_text = page.locator("h1").first.inner_text().upper()
+                                if model_full not in h1_text and model_clean not in h1_text:
+                                    print(f"        [WARN] 頁面 H1 不包含目標型號: {h1_text}")
+                                    if s_type == "announcement":
+                                        continue
                             except: pass
 
-                            for row_idx, row in enumerate(rows):
-                                cells = row.locator("td, th").all()
-                                if not cells: continue
-                                
-                                try:
-                                    cell0_text = cells[0].inner_text().strip().upper()
-                                    # [優化] 排除 Conversion/Upgrade 欄位
-                                    if "CONVERSION" in cell0_text or "UPGRADE" in cell0_text:
-                                        continue
-
-                                    if model_full in cell0_text or model_clean in cell0_text or (len(cell0_text) > 3 and cell0_text in model_full):
-                                        row_data = [c.inner_text().strip() for c in cells]
-                                        current_cand_res = {}
-                                        for idx, h in enumerate(headers):
-                                            if idx >= len(row_data): break
-                                            val = self.normalize_date(row_data[idx])
-                                            if val != "N/A":
-                                                if "ANNOUNCED" in h or "ANNOUNCE" in h: current_cand_res["Announced"] = val
-                                                elif "AVAILABLE" in h or "AVAILABILITY" in h: current_cand_res["Available"] = val
-                                                elif "WITHDRAWN" in h or "WITHDRAWAL" in h: current_cand_res["Withdrawn"] = val
-                                                elif "DISCONTINUED" in h or "DISCONTINUANCE" in h or "EOS" in h or "SERVICE DISCONTINUED" in h: 
-                                                    current_cand_res["Discontinued"] = val
-                                        
-                                        # 靜態索引兜底
-                                        if "Announced" not in current_cand_res and len(row_data) > 1:
-                                            val = self.normalize_date(row_data[1])
-                                            if val != "N/A": current_cand_res["Announced"] = val
-                                        if "Available" not in current_cand_res and len(row_data) > 2:
-                                            val = self.normalize_date(row_data[2])
-                                            if val != "N/A": current_cand_res["Available"] = val
-                                        
-                                        # 合併數據
-                                        for k, v in current_cand_res.items():
-                                            if final_res.get(k, "N/A") == "N/A":
-                                                final_res[k] = v
-                                                final_res["Url"] = full_url
-                                        
-                                        if current_cand_res:
-                                            print(f"    [DATA] 提取結果: {current_cand_res}")
-                                except: continue
-
-                        # 文本正則兜底 (加入 Shadow DOM 穿透與 Proximity 檢查)
-                        if final_res["Announced"] == "N/A":
-                            try:
-                                # 使用 JS 深度提取包含 Shadow DOM 的所有文本
-                                page_text = page.evaluate("""
-                                    () => {
-                                        function getDeepText(node) {
-                                            let text = "";
-                                            if (node.nodeType === Node.TEXT_NODE) {
-                                                text += node.textContent + " ";
-                                            } else if (node.nodeType === Node.ELEMENT_NODE) {
-                                                if (node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
-                                                    if (node.shadowRoot) {
-                                                        text += getDeepText(node.shadowRoot);
-                                                    }
-                                                    for (let child of node.childNodes) {
-                                                        text += getDeepText(child);
-                                                    }
-                                                }
-                                            } else if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-                                                for (let child of node.childNodes) {
-                                                    text += getDeepText(child);
-                                                }
-                                            }
-                                            return text;
-                                        }
-                                        return getDeepText(document.body);
-                                    }
-                                """)
-                                
-                                # 尋找型號附近的日期 (多錨點掃描)
-                                anchors = [model_full, model_clean, "PLANNED AVAILABILITY DATE", "ANNOUNCEMENT DATE", "WITHDRAWAL DATE"]
-                                found_dates = []
-                                
-                                for anchor in anchors:
-                                    pos = page_text.upper().find(anchor)
-                                    if pos != -1:
-                                        # 取前後各 1000 字元的片段
-                                        start = max(0, pos - 200)
-                                        snippet = page_text[start : pos + 1500]
-                                        dates = re.findall(r'(\d{4}-\d{2}-\d{2})|([A-Za-z]+\s+\d{1,2},\s+\d{4})|(\d{1,2}\s+[A-Za-z]+\s+\d{4})', snippet)
-                                        for d_tuple in dates:
-                                            d_str = d_tuple[0] or d_tuple[1] or d_tuple[2]
-                                            # 檢查日期周圍是否有 Support level changed 關鍵字
-                                            date_pos = snippet.find(d_str)
-                                            context_before = snippet[max(0, date_pos-50):date_pos].upper()
-                                            if "SUPPORT LEVEL" in context_before or "LEVEL CHANGED" in context_before:
-                                                continue
-                                                
-                                            norm = self.normalize_date(d_str)
-                                            if norm != "N/A" and norm not in found_dates:
-                                                found_dates.append(norm)
-                                
-                                if len(found_dates) >= 2:
-                                    # 簡單排序：最早的是 Announced, 稍晚的是 Available
-                                    sorted_dates = sorted(found_dates)
-                                    final_res["Announced"] = sorted_dates[0]
-                                    final_res["Available"] = sorted_dates[1]
-                                    final_res["Url"] = full_url
-                                    print(f"    [DATA] 多錨點文本提取成功: {sorted_dates[:2]}")
-                            except Exception as e:
-                                print(f"    [TRACE] 深度文本提取失敗: {e}")
-                                pass
-                        
-                        if final_res["Announced"] != "N/A" and final_res["Available"] != "N/A":
-                            print(f"  [VERIFIED] 已從 {s_type} 獲得核心數據。")
-                            break
+                            is_ap = False
+                            ap_indicators = ["ASIA PACIFIC", "AP", "JAPAN", "AUSTRALIA", "CHINA", "KOREA", "INDIA", "ASEAN"]
                             
-                    except Exception as e:
-                        print(f"  [TRACE] 存取出錯: {e}")
-                        continue
-            except Exception as e:
-                print(f"  [ERROR] 處理 {s_type} 搜尋時出錯: {e}")
-                continue
+                            try:
+                                page_content = page.content().upper()
+                                if any(ind in page_content for ind in ap_indicators):
+                                    is_ap = True
+                                
+                                if not is_ap:
+                                    region_btn = page.locator("button.dw-region-selector-button, .region-selector").first
+                                    if region_btn.is_visible():
+                                        region_btn.click()
+                                        ap_opt = page.locator("text=Asia Pacific, text=AP, text=Japan").first
+                                        if ap_opt.is_visible():
+                                            ap_opt.click()
+                                            page.wait_for_timeout(2000)
+                                            is_ap = True
+                            except: pass
 
-        # 第三階層 Fallback: IBM Support Lifecycle Site (DataTables)
-        if final_res["Announced"] == "N/A" or final_res["Available"] == "N/A":
-            print(f"  [FALLBACK] 前兩階層未果，啟動第三階層: IBM Support Lifecycle")
-            support_res = self._search_support_lifecycle(model, page)
-            for k, v in support_res.items():
-                if final_res.get(k, "N/A") == "N/A" and v != "N/A":
-                    final_res[k] = v
-                    final_res["Url"] = "https://www.ibm.com/support/pages/lifecycle/"
+                            page.evaluate("window.scrollTo(0, document.body.scrollHeight/2)")
+                            page.wait_for_timeout(1000)
+                            page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                            
+                            try:
+                                page.wait_for_function("""
+                                    () => {
+                                        const text = document.body.innerTextContent || document.body.innerText;
+                                        return /\\d{4}-\\d{2}-\\d{2}|[A-Za-z]+\\s+\\d{1,2},\\s+\\d{4}|\\d{1,2}\\s+[A-Za-z]+\\s+\\d{4}/.test(text);
+                                    }
+                                """, timeout=8000)
+                            except:
+                                pass
+                            
+                            page.wait_for_timeout(2000)
+                            try: page.wait_for_selector("table", timeout=5000)
+                            except: pass
+                            
+                            content_upper = page.content().upper()
+                            if model_full not in content_upper and model_clean not in content_upper:
+                                if model_full not in cand['title'].upper() and model_clean not in cand['title'].upper():
+                                    continue
+
+                            tables = page.locator("table").all()
+                            for table_idx, table in enumerate(tables):
+                                rows = table.locator("tr").all()
+                                if not rows: continue
+                                
+                                headers = []
+                                try:
+                                    for r in rows[:3]:
+                                        text = r.inner_text().upper()
+                                        if any(k in text for k in ["MODEL", "ANNOUNCED", "AVAILABLE", "WITHDRAWN", "DISCONTINUED"]):
+                                            if "SUPPORT LEVEL" in text: continue
+                                            h_cells = r.locator("th, td").all()
+                                            headers = [h.inner_text().strip().upper() for h in h_cells]
+                                            break
+                                    if not headers:
+                                        h_cells = rows[0].locator("th, td").all()
+                                        headers = [h.inner_text().strip().upper() for h in h_cells]
+                                except: pass
+
+                                for row_idx, row in enumerate(rows):
+                                    cells = row.locator("td, th").all()
+                                    if not cells: continue
+                                    
+                                    try:
+                                        cell0_text = cells[0].inner_text().strip().upper()
+                                        if "CONVERSION" in cell0_text or "UPGRADE" in cell0_text:
+                                            continue
+
+                                        if model_full in cell0_text or model_clean in cell0_text or (len(cell0_text) > 3 and cell0_text in model_full):
+                                            row_data = [c.inner_text().strip() for c in cells]
+                                            current_cand_res = {}
+                                            for idx, h in enumerate(headers):
+                                                if idx >= len(row_data): break
+                                                val = self.normalize_date(row_data[idx])
+                                                if val != "N/A":
+                                                    # 根據來源類型 (s_type) 決定權重
+                                                    if "ANNOUNCED" in h or "ANNOUNCE" in h:
+                                                        if s_type == "salesmanual": current_cand_res["Announced"] = val
+                                                        elif final_res.get("Announced", "N/A") == "N/A":
+                                                            current_cand_res["Announced"] = val
+                                                    
+                                                    elif "AVAILABLE" in h or "AVAILABILITY" in h:
+                                                        if final_res.get("Available", "N/A") == "N/A":
+                                                            current_cand_res["Available"] = val
+                                                            
+                                                    elif "WITHDRAWN" in h or "WITHDRAWAL" in h:
+                                                        # EOM 使用 Product lifecycle 或 salesmanual
+                                                        current_cand_res["Withdrawn"] = val
+                                                        
+                                                    elif "SUPPORT LEVEL CHANGED" in h:
+                                                        if final_res.get("EOS_Std", "N/A") == "N/A":
+                                                            current_cand_res["EOS_Std"] = val
+                                                            
+                                                    elif "SERVICE DISCONTINUED" in h or "SERVICE DISCONTINUANCE" in h:
+                                                        # EOS 強制使用 Service Discontinued
+                                                        current_cand_res["EOS_Full"] = val
+                                                        
+                                                    elif "DISCONTINUED" in h or "DISCONTINUANCE" in h or "EOS" in h:
+                                                        if "SUPPORT LEVEL" in h: 
+                                                            if final_res.get("EOS_Std", "N/A") == "N/A":
+                                                                current_cand_res["EOS_Std"] = val
+                                                        else: 
+                                                            if final_res.get("EOS_Full", "N/A") == "N/A":
+                                                                current_cand_res["EOS_Full"] = val
+                                            
+                                            # 合併數據
+                                            for k, v in current_cand_res.items():
+                                                if final_res.get(k, "N/A") == "N/A":
+                                                    final_res[k] = v
+                                            
+                                            # Source Link 使用 Product lifecycle (如果已經有了就不蓋掉)
+                                            if final_res.get("Url") == "-" or final_res.get("Url") == "N/A":
+                                                final_res["Url"] = full_url
+                                            
+                                            if current_cand_res:
+                                                print(f"        [DATA] 提取結果: {current_cand_res}")
+                                    except: continue
+
+                            # 文本正則兜底
+                            if final_res["Announced"] == "N/A":
+                                try:
+                                    page_text = page.evaluate("() => document.body.innerText")
+                                    anchors = [model_full, model_clean, "PLANNED AVAILABILITY DATE", "ANNOUNCEMENT DATE"]
+                                    found_dates = []
+                                    for anchor in anchors:
+                                        pos = page_text.upper().find(anchor)
+                                        if pos != -1:
+                                            start = max(0, pos - 200)
+                                            snippet = page_text[start : pos + 1500]
+                                            dates = re.findall(r'(\d{4}-\d{2}-\d{2})|([A-Za-z]+\s+\d{1,2},\\s+\d{4})|(\d{1,2}\\s+[A-Za-z]+\\s+\d{4})', snippet)
+                                            for d_tuple in dates:
+                                                d_str = d_tuple[0] or d_tuple[1] or d_tuple[2]
+                                                norm = self.normalize_date(d_str)
+                                                if norm != "N/A" and norm not in found_dates:
+                                                    found_dates.append(norm)
+                                    
+                                    if len(found_dates) >= 2:
+                                        sorted_dates = sorted(found_dates)
+                                        if final_res["Announced"] == "N/A": final_res["Announced"] = sorted_dates[0]
+                                        if final_res["Available"] == "N/A": final_res["Available"] = sorted_dates[1]
+                                        final_res["Url"] = full_url
+                                except: pass
+                            
+                            if final_res["Announced"] != "N/A" and final_res["Available"] != "N/A":
+                                print(f"      [VERIFIED] 已從 {s_type} 獲得核心數據。")
+                                break
+                                
+                        except Exception as e:
+                            print(f"      [TRACE] 存取出錯: {e}")
+                            continue
+                except Exception as e:
+                    print(f"    [ERROR] 處理 {s_type} 搜尋時出錯: {e}")
+                    continue
 
         return final_res
 
     def _search_support_lifecycle(self, model, page):
         support_url = "https://www.ibm.com/support/pages/lifecycle/"
-        res = {"Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "Discontinued": "N/A"}
+        res = {"Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "N/A"}
         try:
             page.goto(support_url, wait_until="domcontentloaded", timeout=60000)
             # 尋找搜尋框並輸入
@@ -428,16 +395,32 @@ class IBMLifecycleHarness:
                 
                 if model_full in prod_name or model_clean in pid_mtm:
                     print(f"    [MATCH] Support Lifecycle 匹配成功: {prod_name}")
-                    # 第 6 欄: GA Date
+                    # 第 6 欄: GA Date -> 映射為 Available (GA)
                     ga_date = self.normalize_date(cells[5].inner_text().strip())
-                    # 第 7 欄: EOS Date
-                    eos_date = self.normalize_date(cells[6].inner_text().strip())
-                    
                     if ga_date != "N/A":
-                        res["Announced"] = ga_date
                         res["Available"] = ga_date
-                    if eos_date != "N/A":
-                        res["Discontinued"] = eos_date
+                    
+                    # 第 7 欄: Transition to Extended -> 映射為 EOS_Std
+                    eos_std = self.normalize_date(cells[6].inner_text().strip())
+                    if eos_std != "N/A":
+                        res["EOS_Std"] = eos_std
+                    
+                    # 第 8 欄: Extended Support Complete -> 映射為 EOS_Full
+                    try:
+                        if len(cells) >= 8:
+                            eos_full = self.normalize_date(cells[7].inner_text().strip())
+                            if eos_full != "N/A": res["EOS_Full"] = eos_full
+                    except: pass
+                    
+                    # 提取具體產品頁面連結
+                    try:
+                        link_loc = cells[1].locator("a").first
+                        if link_loc.is_visible():
+                            href = link_loc.get_attribute("href")
+                            if href:
+                                if href.startswith('/'): res["Url"] = "https://www.ibm.com" + href
+                                else: res["Url"] = href
+                    except: pass
                     
                     return res
         except Exception as e:
@@ -446,7 +429,7 @@ class IBMLifecycleHarness:
         return res
 
     def _null_result(self, model):
-        return {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "Discontinued": "N/A", "Url": "-"}
+        return {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
 
     def run(self):
         with sync_playwright() as p:
@@ -456,21 +439,27 @@ class IBMLifecycleHarness:
             page = context.new_page()
             
             all_results = {}
-            for category, models in self.models_data.items():
-                print(f"\n{'='*20} 處理分組: {category} {'='*20}")
-                category_res = []
-                for idx, model in enumerate(models):
-                    print(f"進度: [{idx+1}/{len(models)}]")
-                    res = self.process_model(model, page)
-                    category_res.append(res)
-                    # 資源回收
-                    if (idx + 1) % 10 == 0:
-                        page.close()
-                        page = context.new_page()
-                all_results[category] = category_res
-            
-            browser.close()
-            self._write_report(all_results)
+            try:
+                for category, models in self.models_data.items():
+                    print(f"\n{'='*20} 處理分組: {category} {'='*20}")
+                    category_res = []
+                    for idx, model in enumerate(models):
+                        print(f"進度: [{idx+1}/{len(models)}]")
+                        try:
+                            res = self.process_model(model, page)
+                            category_res.append(res)
+                        except Exception as e:
+                            print(f"    [CRITICAL] 處理型號 {model} 時發生嚴重錯誤: {e}")
+                            category_res.append(self._null_result(model))
+                            
+                        # 資源回收
+                        if (idx + 1) % 10 == 0:
+                            page.close()
+                            page = context.new_page()
+                    all_results[category] = category_res
+            finally:
+                browser.close()
+                self._write_report(all_results)
 
     def _write_report(self, all_results):
         with open(self.report_path, 'w', encoding='utf-8') as f:
@@ -479,11 +468,11 @@ class IBMLifecycleHarness:
             
             for category, results in all_results.items():
                 f.write(f"## {category}\n\n")
-                f.write("| Model | Announced | Available | Withdrawn | Discontinued | Source |\n")
-                f.write("|-------|-----------|-----------|-----------|--------------|--------|\n")
+                f.write("| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |\n")
+                f.write("|-------|-----------|-----------|-----------|----------------|------------|--------|\n")
                 for r in results:
                     url_cell = f"[Link]({r['Url']})" if r['Url'] != "-" else "-"
-                    f.write(f"| {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['Discontinued']} | {url_cell} |\n")
+                    f.write(f"| {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['EOS_Std']} | {r['EOS_Full']} | {url_cell} |\n")
                 f.write("\n")
         
         print(f"\n[+] 任務完成，報表已更新: {self.report_path}")
