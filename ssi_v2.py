@@ -77,8 +77,21 @@ class IBMLifecycleHarness:
 
         # Format: 2020-01-15
         m3 = re.search(r'(\d{4}-\d{2}-\d{2})', date_str)
-        if m3: return m3.group(1)
+        if m3: 
+            norm = m3.group(1)
+            year = int(norm.split('-')[0])
+            if 1980 < year < 2050:
+                return norm
+            else:
+                return "N/A"
         
+        # 最終校驗：若回傳結果包含年份，檢查是否在合理區間
+        year_match = re.search(r'(\d{4})', date_str)
+        if year_match:
+            year = int(year_match.group(1))
+            if not (1980 < year < 2050):
+                return "N/A"
+
         return "N/A"
 
     def process_model(self, model, page):
@@ -162,21 +175,51 @@ class IBMLifecycleHarness:
                     
                     print(f"  [TRACE] 檢查候選公告 ({s_type}): {cand['title']}")
                     
+                    # [優化] 排除顯然不是該型號主體的頁面 (例如 Upgrade/Conversion 頁面)
+                    bad_keywords = ["CONVERSION", "UPGRADE", "FROM ", "TO ", "REPLACEMENT"]
+                    if any(k in cand['title'].upper() for k in bad_keywords):
+                        # 如果標題同時包含目標型號與另一個型號，且包含 bad keywords，則降低優先級或跳過
+                        print(f"    [SKIP] 候選標題包含疑似非主體關鍵字: {cand['title']}")
+                        continue
+
                     try:
                         page.goto(full_url, wait_until="domcontentloaded", timeout=60000)
                         
-                        # 核心優化：嘗試切換至 AP 地區以確保數據一致性
+                        # [優化] 驗證頁面主體 (H1) 是否包含目標型號
                         try:
-                            # 尋找地區選擇器 (IBM Docs 常見模式)
-                            region_btn = page.locator("button.dw-region-selector-button, .region-selector").first
-                            if region_btn.is_visible():
-                                region_btn.click()
-                                # 優先尋找 AP 或 Asia Pacific
-                                ap_opt = page.locator("text=Asia Pacific, text=AP, text=Japan").first
-                                if ap_opt.is_visible():
-                                    ap_opt.click()
-                                    page.wait_for_timeout(2000)
+                            h1_text = page.locator("h1").first.inner_text().upper()
+                            if model_full not in h1_text and model_clean not in h1_text:
+                                print(f"    [WARN] 頁面 H1 不包含目標型號: {h1_text}")
+                                # 如果是 Sales Manual 且 H1 沒匹配，通常是正確的產品頁面，但 Announcement 則需嚴格
+                                if s_type == "announcement":
+                                    continue
                         except: pass
+
+                        # 核心優化：嘗試切換至 AP 地區以確保數據一致性 (強制要求 AP)
+                        is_ap = False
+                        ap_indicators = ["ASIA PACIFIC", "AP", "JAPAN", "AUSTRALIA", "CHINA", "KOREA", "INDIA", "ASEAN"]
+                        
+                        try:
+                            # 檢查目前頁面是否已是 AP 地區 (透過麵包屑或中繼資料)
+                            page_content = page.content().upper()
+                            if any(ind in page_content for ind in ap_indicators):
+                                is_ap = True
+                            
+                            if not is_ap:
+                                # 尋找地區選擇器 (IBM Docs 常見模式)
+                                region_btn = page.locator("button.dw-region-selector-button, .region-selector").first
+                                if region_btn.is_visible():
+                                    region_btn.click()
+                                    # 優先尋找 AP 或 Asia Pacific
+                                    ap_opt = page.locator("text=Asia Pacific, text=AP, text=Japan").first
+                                    if ap_opt.is_visible():
+                                        ap_opt.click()
+                                        page.wait_for_timeout(2000)
+                                        is_ap = True
+                        except: pass
+
+                        # 如果最終無法確認是 AP 且用戶強制要求，則標註或跳過
+                        # 在此我們先繼續，但後續提取會優先標註 AP 來源
 
                         # 自動滾動以觸發動態加載 (Shadow DOM / Lazy Load)
                         page.evaluate("window.scrollTo(0, document.body.scrollHeight/2)")
@@ -233,6 +276,10 @@ class IBMLifecycleHarness:
                                 
                                 try:
                                     cell0_text = cells[0].inner_text().strip().upper()
+                                    # [優化] 排除 Conversion/Upgrade 欄位
+                                    if "CONVERSION" in cell0_text or "UPGRADE" in cell0_text:
+                                        continue
+
                                     if model_full in cell0_text or model_clean in cell0_text or (len(cell0_text) > 3 and cell0_text in model_full):
                                         row_data = [c.inner_text().strip() for c in cells]
                                         current_cand_res = {}

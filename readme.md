@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-03 07:50:09
+**Generated:** 2026-05-03 21:47:03
 
 ## Power11
 
@@ -18,7 +18,7 @@
 | Model | Announced | Available | Withdrawn | Discontinued | Source |
 |-------|-----------|-----------|-----------|--------------|--------|
 | 9028-21B | 2024-05-07 | 2024-06-14 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/family-9028-01-power-s1012) |
-| 9080-HEX | 7300-00-04 | 7300-01-02 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/family-908005-power-e1180-enterprise-server-9080-heu) |
+| 9080-HEX | 2021-09-08 | 2021-09-17 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-e1080-enterprise-server) |
 | 9105-42A | 2022-07-12 | 2022-07-22 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-s1024-9105-42a) |
 | 9105-22B | 2022-07-12 | 2022-07-22 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-s1022s-9105-22b) |
 | 9105-22A | 2022-07-05 | 2022-07-22 | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-s1022-9105-22a) |
@@ -30,17 +30,17 @@
 
 | Model | Announced | Available | Withdrawn | Discontinued | Source |
 |-------|-----------|-----------|-----------|--------------|--------|
-| 9009-42A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-s924-9009-42a) |
+| 9009-42A | 2018-02-13 | 2018-03-20 | 2021-01-29 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s924-9009-42a) |
 | 9009-42G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s924-9009-42g) |
 | 9009-41G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s914-9009-41g-2023-10-24) |
-| 9009-41A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-s914-9009-41a) |
+| 9009-41A | 2018-02-13 | 2018-03-20 | 2021-01-29 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s914-9009-41a) |
 | 9009-22G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s922-9009-22g) |
-| 9009-22A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-s922-9009-22a) |
+| 9009-22A | 2018-02-13 | 2018-03-20 | 2021-01-29 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-s922-9009-22a) |
 | 9080-M9S | 2018-08-07 | 2018-09-21 | 2022-10-31 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-e980-9080-m9s) |
 | 9223-42S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-9223-42s-2023-10-24) |
-| 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-sap-hana-9223-42h) |
+| 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-sap-hana-9223-42h) |
 | 9223-22S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h922-9223-22s-2023-10-24) |
-| 9223-22H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-h922-sap-hana-9223-22h) |
+| 9223-22H | 2018-02-13 | 2018-03-20 | 2021-01-29 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h922-sap-hana-9223-22h) |
 
 ## Power8
 
@@ -56,9 +56,18 @@
 | 9119-MME | 2014-10-06 | 2014-11-18 | 2017-07-14 | 2024-10-31 | [Link](https://www.ibm.com/docs/en/announcements/power-870-server-9119-mme) |
 | 9119-MHE | 2014-10-06 | 2014-11-18 | 2017-07-14 | 2024-10-31 | [Link](https://www.ibm.com/docs/en/announcements/power-system-e880-9119-mhe) |
 
+## Power6
+
+| Model | Announced | Available | Withdrawn | Discontinued | Source |
+|-------|-----------|-----------|-----------|--------------|--------|
+| 8203-E4A | 2008-01-29 | 2008-02-29 | 2011-05-27 | 2019-03-31 | [Link](https://www.ibm.com/docs/en/announcements/power-systems-server-model-e4a) |
+| 9117-MMA | 2007-05-22 | 2007-06-08 | 2011-01-07 | 2019-03-31 | [Link](https://www.ibm.com/docs/en/announcements/power-570-model-mma) |
+
 ## Power5
 
 | Model | Announced | Available | Withdrawn | Discontinued | Source |
 |-------|-----------|-----------|-----------|--------------|--------|
 | 9406-520 | 2004-05-04 | 2004-06-11 | 2008-07-08 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/eserver-i5-model-520) |
+| 9406-525 | 2007-04-10 | 2007-04-20 | 2009-01-01 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/9406-model-525) |
+| 9407-515 | 2007-04-10 | 2007-04-20 | 2009-01-01 | 2018-12-31 | [Link](https://www.ibm.com/docs/en/announcements/9407-model-515) |
 
