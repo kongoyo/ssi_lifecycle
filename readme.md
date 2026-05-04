@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-04 02:59:15
+**Generated:** 2026-05-04 16:38:13
 
 ## Power11
 
@@ -67,9 +67,9 @@
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7094023) |
-| 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7094025) |
-| 9407-515 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2019-01-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7093695) |
+| 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094023) |
+| 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094025) |
+| 9407-515 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2019-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093695) |
 
 ## SVC
 
@@ -114,5 +114,5 @@
 | 3580-H23 | 2003-01-28 | 2003-02-14 | 2006-06-16 | 2022-12-31 | 2022-12-31 | [Link](https://www.ibm.com/support/pages/node/7093167) |
 | 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7092417) |
 | 3580-H13 | 2002-09-03 | 2002-09-03 | 2005-01-28 | N/A | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7094044) |
-| 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7093587) |
+| 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093587) |
 

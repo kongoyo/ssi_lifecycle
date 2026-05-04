@@ -362,6 +362,12 @@ class IBMLifecycleHarness:
                     print(f"    [ERROR] 處理 {s_type} 搜尋時出錯: {e}")
                     continue
 
+        # 新增規則：EOS (Full) 不可比 EOS (Standard) 小，發生則視為無效，顯示 N/A
+        if final_res["EOS_Std"] != "N/A" and final_res["EOS_Full"] != "N/A":
+            if final_res["EOS_Full"] < final_res["EOS_Std"]:
+                print(f"    [VALIDATION] EOS_Full ({final_res['EOS_Full']}) 早於 EOS_Std ({final_res['EOS_Std']})，將其設為 N/A")
+                final_res["EOS_Full"] = "N/A"
+        
         return final_res
 
     def _search_support_lifecycle(self, model, page):
