@@ -319,7 +319,9 @@ class IBMLifecycleHarness:
                                                     final_res[k] = v
                                             
                                             # Source Link 使用 Product lifecycle (如果已經有了就不蓋掉)
-                                            if final_res.get("Url") == "-" or final_res.get("Url") == "N/A":
+                                            # [Harness] 僅在目前為空或為通用搜尋頁面時才允許更新
+                                            weak_urls = ["-", "N/A", "https://www.ibm.com/support/pages/lifecycle/"]
+                                            if final_res.get("Url") in weak_urls:
                                                 final_res["Url"] = full_url
                                             
                                             if current_cand_res:
@@ -348,7 +350,11 @@ class IBMLifecycleHarness:
                                         sorted_dates = sorted(found_dates)
                                         if final_res["Announced"] == "N/A": final_res["Announced"] = sorted_dates[0]
                                         if final_res["Available"] == "N/A": final_res["Available"] = sorted_dates[1]
-                                        final_res["Url"] = full_url
+                                        
+                                        # [Harness] 正則補位時也應遵守 URL 保護原則
+                                        weak_urls = ["-", "N/A", "https://www.ibm.com/support/pages/lifecycle/"]
+                                        if final_res.get("Url") in weak_urls:
+                                            final_res["Url"] = full_url
                                 except: pass
                             
                             if final_res["Announced"] != "N/A" and final_res["Available"] != "N/A":

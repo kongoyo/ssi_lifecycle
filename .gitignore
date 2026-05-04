@@ -4298,3 +4298,7 @@ ssi_lifecycle1.py
 test_single.py
 verify_v2.py
 ssi_lifecycle1.py
+debug_9043.png
+test_9043.py
+test_report.md
+verify_9043_fix.py
