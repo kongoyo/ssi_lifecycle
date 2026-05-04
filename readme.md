@@ -1,12 +1,12 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-04 16:38:13
+**Generated:** 2026-05-04 15:29:18
 
 ## Power11
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9043-MRU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/family-904302-power-e1150-enterprise-midrange-technology-based-server-9043-mru) |
+| 9043-MRU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246293) |
 | 9080-HEU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246290) |
 | 9824-22A | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246294) |
 | 9824-42A | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246295) |
@@ -115,4 +115,11 @@
 | 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7092417) |
 | 3580-H13 | 2002-09-03 | 2002-09-03 | 2005-01-28 | N/A | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7094044) |
 | 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093587) |
+
+## Hardware Management Console
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 7063-CR2 | 2021-04-13 | 2021-05-21 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094367) |
+| 7063-CR1 | 2017-10-10 | 2017-09-15 | 2021-07-31 | 2026-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094366) |
 
