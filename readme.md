@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-04 06:43:09
+**Generated:** 2026-05-04 02:59:15
 
 ## Power11
 
@@ -33,12 +33,12 @@
 | 9009-42A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093105) |
 | 9009-42G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7092468) |
 | 9009-41G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093121) |
-| 9009-41A | N/A | 2018-03-20 | N/A | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093106) |
+| 9009-41A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093106) |
 | 9009-22G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093120) |
 | 9009-22A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093104) |
 | 9080-M9S | 2018-08-07 | 2018-09-21 | 2022-10-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093110) |
 | 9223-42S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093023) |
-| 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/docs/en/announcements/power-system-h924-sap-hana-9223-42h) |
+| 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093107) |
 | 9223-22S | 2020-10-06 | 2020-11-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093022) |
 | 9223-22H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093108) |
 
@@ -70,4 +70,49 @@
 | 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7094023) |
 | 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7094025) |
 | 9407-515 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2019-01-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7093695) |
+
+## SVC
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 2145-SV3 | 2022-02-08 | 2022-03-04 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094471) |
+| 2145-SV2 | 2020-02-11 | 2020-03-06 | 2023-01-28 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7092524) |
+| 2145-SV1 | 2016-08-23 | 2016-09-09 | 2021-10-12 | 2026-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7092523) |
+
+## SAN64B-6
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 8960-F64 | 2016-10-11 | 2016-11-11 | 2023-02-28 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7092979) |
+| 8960-F65 | 2020-10-13 | 2020-11-20 | 2024-12-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093033) |
+| 8960-N64 | 2016-10-11 | 2016-11-11 | 2023-09-12 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7092981) |
+| 8960-N65 | 2020-10-13 | 2020-11-20 | 2024-12-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093035) |
+
+## SAN24B-6
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 8969-F24 | 2022-05-24 | 2022-06-03 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094469) |
+
+## TS2290
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 3580-H9S | 2021-11-23 | 2021-12-03 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094358) |
+
+## TS2230
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 3580-S3V | N/A | 2018-01-17 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094531) |
+
+## TS3580
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 3580-L33 | N/A | 2005-03-15 | N/A | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093863) |
+| 3580-H23 | 2003-01-28 | 2003-02-14 | 2006-06-16 | 2022-12-31 | 2022-12-31 | [Link](https://www.ibm.com/support/pages/node/7093167) |
+| 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7092417) |
+| 3580-H13 | 2002-09-03 | 2002-09-03 | 2005-01-28 | N/A | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7094044) |
+| 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7093587) |
 
