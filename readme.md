@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-06-15 03:51:48
+**Generated:** 2026-06-22 03:52:48
 
 ## Power11
 
@@ -17,7 +17,7 @@
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9028-21B | 2024-05-07 | 2024-06-14 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7235646) |
+| 9028-21B | 2024-05-07 | 2024-06-14 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7235646) |
 | 9080-HEX | 2021-09-08 | 2021-09-17 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094334) |
 | 9105-42A | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094490) |
 | 9105-22B | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094671) |
