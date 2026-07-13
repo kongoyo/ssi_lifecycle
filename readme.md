@@ -1,6 +1,6 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-07-06 03:23:21
+**Generated:** 2026-07-13 02:57:08
 
 ## Power11
 
@@ -60,14 +60,14 @@
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 8203-E4A | 2008-01-29 | 2008-01-29 | 2011-05-27 | 2019-03-31 | 2019-03-31 | [Link](https://www.ibm.com/support/pages/node/7094682) |
-| 9117-MMA | 2007-05-22 | 2007-10-09 | 2011-01-07 | 2019-03-31 | 2019-03-31 | [Link](https://www.ibm.com/support/pages/node/7094017) |
+| 8203-E4A | N/A | 2008-01-29 | N/A | 2019-03-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094682) |
+| 9117-MMA | N/A | 2007-10-09 | N/A | 2019-03-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094017) |
 
 ## Power5
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | 2026-04-03 | [Link](https://www.ibm.com/support/pages/node/7094023) |
+| 9406-520 | N/A | 2004-10-15 | N/A | 2019-01-31 | 2026-04-03 | [Link](https://www.ibm.com/support/pages/node/7094023) |
 | 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | 2026-04-03 | [Link](https://www.ibm.com/support/pages/node/7094025) |
 | 9407-515 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2019-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093695) |
 
@@ -114,7 +114,7 @@
 | 3580-H23 | 2003-01-28 | 2003-02-14 | 2006-06-16 | 2022-12-31 | 2022-12-31 | [Link](https://www.ibm.com/support/pages/node/7093167) |
 | 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7092417) |
 | 3580-H13 | 2002-09-03 | 2002-09-03 | 2005-01-28 | N/A | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7094044) |
-| 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093587) |
+| 3580-L13 | N/A | 2002-09-20 | N/A | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093587) |
 
 ## Hardware Management Console
 
