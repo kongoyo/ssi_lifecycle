@@ -2,7 +2,7 @@ name: Auto Update IBM Lifecycle
 
 on:
   schedule:
-    - cron: '0 0 * * 1' # 每週一執行
+    - cron: '0 0 */14 * 1' # 每隔 14 天且當天為週一時執行
   workflow_dispatch:
 
 jobs:
