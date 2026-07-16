@@ -2,6 +2,7 @@
 
 Family	Type	Model
 		
+Power11	9242    21B
 Power11	9080	HEU
 Power11	9824	22A
 Power11	9824	42A
