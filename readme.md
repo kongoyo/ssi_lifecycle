@@ -1,12 +1,13 @@
 # IBM Hardware Lifecycle Report
 
-**Generated:** 2026-05-04 16:38:13
+**Generated:** 2026-07-16 02:25:04
 
 ## Power11
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9043-MRU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/family-904302-power-e1150-enterprise-midrange-technology-based-server-9043-mru) |
+| 9242-21B | 2026-07-14 | 2026-07-24 | N/A | N/A | N/A | [Link](https://www.ibm.com/docs/en/announcements/family-9242-01-power-s1112) |
+| 9043-MRU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246293) |
 | 9080-HEU | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246290) |
 | 9824-22A | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246294) |
 | 9824-42A | 2025-07-08 | 2025-07-08 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7246295) |
@@ -18,13 +19,13 @@
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
 | 9028-21B | 2024-05-07 | 2024-06-14 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7235646) |
-| 9080-HEX | 2021-09-08 | 2021-09-17 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094334) |
-| 9105-42A | 2022-07-12 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094490) |
-| 9105-22B | 2022-07-12 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094671) |
-| 9105-22A | 2022-07-05 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094672) |
-| 9105-41B | 2022-07-12 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094670) |
-| 9786-42H | 2022-07-12 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094796) |
-| 9786-22H | 2022-07-12 | 2022-07-22 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094797) |
+| 9080-HEX | 2021-09-08 | 2021-09-17 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094334) |
+| 9105-42A | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094490) |
+| 9105-22B | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094671) |
+| 9105-22A | 2022-07-05 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094672) |
+| 9105-41B | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094670) |
+| 9786-42H | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094796) |
+| 9786-22H | 2022-07-12 | 2022-07-22 | 2026-07-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094797) |
 
 ## Power9
 
@@ -36,7 +37,7 @@
 | 9009-41A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093106) |
 | 9009-22G | 2020-07-14 | 2020-07-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093120) |
 | 9009-22A | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093104) |
-| 9080-M9S | 2018-08-07 | 2018-09-21 | 2022-10-31 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093110) |
+| 9080-M9S | 2018-08-07 | 2018-09-21 | 2022-10-31 | 2027-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093110) |
 | 9223-42S | 2020-10-06 | 2020-11-20 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093023) |
 | 9223-42H | 2018-02-13 | 2018-03-20 | 2021-01-29 | 2026-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093107) |
 | 9223-22S | 2020-10-06 | 2020-11-24 | 2023-10-20 | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7093022) |
@@ -67,8 +68,8 @@
 
 | Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
 |-------|-----------|-----------|-----------|----------------|------------|--------|
-| 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094023) |
-| 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094025) |
+| 9406-520 | 2004-05-04 | 2004-10-15 | 2008-07-08 | 2019-01-31 | 2026-04-03 | [Link](https://www.ibm.com/support/pages/node/7094023) |
+| 9406-525 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2020-10-31 | 2026-04-03 | [Link](https://www.ibm.com/support/pages/node/7094025) |
 | 9407-515 | 2007-04-10 | 2007-04-10 | 2009-01-01 | 2019-01-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093695) |
 
 ## SVC
@@ -115,4 +116,11 @@
 | 3580-L23 | 2003-01-28 | 2003-02-14 | 2006-10-27 | 2018-12-31 | 2018-12-31 | [Link](https://www.ibm.com/support/pages/node/7092417) |
 | 3580-H13 | 2002-09-03 | 2002-09-03 | 2005-01-28 | N/A | 2013-12-31 | [Link](https://www.ibm.com/support/pages/node/7094044) |
 | 3580-L13 | 2002-09-03 | 2002-09-20 | 2005-01-28 | 2022-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7093587) |
+
+## Hardware Management Console
+
+| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |
+|-------|-----------|-----------|-----------|----------------|------------|--------|
+| 7063-CR2 | 2021-04-13 | 2021-05-21 | N/A | N/A | N/A | [Link](https://www.ibm.com/support/pages/node/7094367) |
+| 7063-CR1 | 2017-10-10 | 2017-09-15 | 2021-07-31 | 2026-12-31 | N/A | [Link](https://www.ibm.com/support/pages/node/7094366) |
 
