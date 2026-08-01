@@ -32,7 +32,20 @@ class IBMLifecycleHarness:
                 with open(yf, 'r', encoding='utf-8') as f:
                     data = yaml.safe_load(f)
                     if data:
-                        combined_data.update(data)
+                        # 正規化：支援舊格式 (純字串) 與新格式 (dict with mtm/name)
+                        normalized = {}
+                        for category, items in data.items():
+                            norm_items = []
+                            for item in items:
+                                if isinstance(item, dict):
+                                    norm_items.append({
+                                        "mtm": item.get("mtm", ""),
+                                        "name": item.get("name", "")
+                                    })
+                                else:
+                                    norm_items.append({"mtm": str(item), "name": ""})
+                            normalized[category] = norm_items
+                        combined_data.update(normalized)
             except Exception as e:
                 print(f"  [!] 讀取 {yf} 失敗: {e}")
         return combined_data
@@ -94,12 +107,15 @@ class IBMLifecycleHarness:
 
         return "N/A"
 
-    def process_model(self, model, page):
-        print(f"\n[Item] 稽核對象: {model}")
+    def process_model(self, model_info, page):
+        # model_info 為 {mtm, name} dict
+        model = model_info["mtm"]
+        model_name = model_info.get("name", "")
+        print(f"\n[Item] 稽核對象: {model} ({model_name})")
         search_parts = model.split('-')
         search_query = "+".join(search_parts) if len(search_parts) > 1 else model
         
-        final_res = {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
+        final_res = {"Model": model, "ModelName": model_name, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
         
         # (3) 第一優先查詢: IBM Support Lifecycle (DataTables)
         print(f"  [STEP 1] 啟動第一優先查詢: IBM Support Lifecycle")
@@ -440,8 +456,10 @@ class IBMLifecycleHarness:
             
         return res
 
-    def _null_result(self, model):
-        return {"Model": model, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
+    def _null_result(self, model_info):
+        model = model_info["mtm"] if isinstance(model_info, dict) else model_info
+        model_name = model_info.get("name", "") if isinstance(model_info, dict) else ""
+        return {"Model": model, "ModelName": model_name, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
 
     def run(self):
         with sync_playwright() as p:
@@ -455,14 +473,14 @@ class IBMLifecycleHarness:
                 for category, models in self.models_data.items():
                     print(f"\n{'='*20} 處理分組: {category} {'='*20}")
                     category_res = []
-                    for idx, model in enumerate(models):
+                    for idx, model_info in enumerate(models):
                         print(f"進度: [{idx+1}/{len(models)}]")
                         try:
-                            res = self.process_model(model, page)
+                            res = self.process_model(model_info, page)
                             category_res.append(res)
                         except Exception as e:
-                            print(f"    [CRITICAL] 處理型號 {model} 時發生嚴重錯誤: {e}")
-                            category_res.append(self._null_result(model))
+                            print(f"    [CRITICAL] 處理型號 {model_info.get('mtm', model_info)} 時發生嚴重錯誤: {e}")
+                            category_res.append(self._null_result(model_info))
                             
                         # 資源回收
                         if (idx + 1) % 10 == 0:
@@ -480,11 +498,12 @@ class IBMLifecycleHarness:
             
             for category, results in all_results.items():
                 f.write(f"## {category}\n\n")
-                f.write("| Model | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |\n")
-                f.write("|-------|-----------|-----------|-----------|----------------|------------|--------|\n")
+                f.write("| Model Name | Model (MTM) | Announced | Available | Withdrawn | EOS (Standard) | EOS (Full) | Source |\n")
+                f.write("|------------|-------------|-----------|-----------|-----------|----------------|------------|--------|\n")
                 for r in results:
                     url_cell = f"[Link]({r['Url']})" if r['Url'] != "-" else "-"
-                    f.write(f"| {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['EOS_Std']} | {r['EOS_Full']} | {url_cell} |\n")
+                    model_name_cell = r.get('ModelName', '') or '-'
+                    f.write(f"| {model_name_cell} | {r['Model']} | {r['Announced']} | {r['Available']} | {r['Withdrawn']} | {r['EOS_Std']} | {r['EOS_Full']} | {url_cell} |\n")
                 f.write("\n")
         
         print(f"\n[+] 任務完成，報表已更新: {self.report_path}")

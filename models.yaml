@@ -1,70 +1,127 @@
 Power11:
-  - 9242-21B
-  - 9043-MRU
-  - 9080-HEU
-  - 9824-22A
-  - 9824-42A
-  - 9856-22H
-  - 9856-42H
+  - mtm: 9242-21B
+    name: "Power S1112"
+  - mtm: 9043-MRU
+    name: "Power E1150"
+  - mtm: 9080-HEU
+    name: "Power E1180"
+  - mtm: 9824-22A
+    name: "Power S1122"
+  - mtm: 9824-42A
+    name: "Power S1124"
+  - mtm: 9856-22H
+    name: "Power L1122"
+  - mtm: 9856-42H
+    name: "Power L1124"
 Power10:
-  - 9028-21B
-  - 9080-HEX
-  - 9105-42A
-  - 9105-22B
-  - 9105-22A
-  - 9105-41B
-  - 9786-42H
-  - 9786-22H
+  - mtm: 9028-21B
+    name: "Power S1022s"
+  - mtm: 9080-HEX
+    name: "Power E1080"
+  - mtm: 9105-42A
+    name: "Power S1024"
+  - mtm: 9105-22B
+    name: "Power S1022"
+  - mtm: 9105-22A
+    name: "Power S1022s"
+  - mtm: 9105-41B
+    name: "Power S1014"
+  - mtm: 9786-42H
+    name: "Power L1024"
+  - mtm: 9786-22H
+    name: "Power L1022"
 Power9:
-  - 9009-42A
-  - 9009-42G
-  - 9009-41G
-  - 9009-41A
-  - 9009-22G
-  - 9009-22A
-  - 9080-M9S
-  - 9223-42S
-  - 9223-42H
-  - 9223-22S
-  - 9223-22H
+  - mtm: 9009-42A
+    name: "Power S922"
+  - mtm: 9009-42G
+    name: "Power S922"
+  - mtm: 9009-41G
+    name: "Power S914"
+  - mtm: 9009-41A
+    name: "Power S914"
+  - mtm: 9009-22G
+    name: "Power S912"
+  - mtm: 9009-22A
+    name: "Power S912"
+  - mtm: 9080-M9S
+    name: "Power E980"
+  - mtm: 9223-42S
+    name: "Power E950"
+  - mtm: 9223-42H
+    name: "Power E950"
+  - mtm: 9223-22S
+    name: "Power E950"
+  - mtm: 9223-22H
+    name: "Power E950"
 Power8:
-  - 8286-41A
-  - 8286-42A
-  - 8284-21A
-  - 8284-22A
-  - 8001-12C
-  - 8001-22C
-  - 8408-E8E
-  - 9119-MME
-  - 9119-MHE
+  - mtm: 8286-41A
+    name: "Power S814"
+  - mtm: 8286-42A
+    name: "Power S824"
+  - mtm: 8284-21A
+    name: "Power S812"
+  - mtm: 8284-22A
+    name: "Power S822"
+  - mtm: 8001-12C
+    name: "Power S812L"
+  - mtm: 8001-22C
+    name: "Power S822L"
+  - mtm: 8408-E8E
+    name: "Power E880"
+  - mtm: 9119-MME
+    name: "Power E870"
+  - mtm: 9119-MHE
+    name: "Power E870C"
 Power6:
-  - 8203-E4A
-  - 9117-MMA
+  - mtm: 8203-E4A
+    name: "Power 520"
+  - mtm: 9117-MMA
+    name: "Power 570"
 Power5:
-  - 9406-520
-  - 9406-525
-  - 9407-515
+  - mtm: 9406-520
+    name: "iSeries 520"
+  - mtm: 9406-525
+    name: "iSeries 525"
+  - mtm: 9407-515
+    name: "iSeries 515"
 SVC:
-  - 2145-SV3
-  - 2145-SV2
-  - 2145-SV1
+  - mtm: 2145-SV3
+    name: "SAN Volume Controller SV3"
+  - mtm: 2145-SV2
+    name: "SAN Volume Controller SV2"
+  - mtm: 2145-SV1
+    name: "SAN Volume Controller SV1"
 SAN64B-6:
-  - 8960-F64
-  - 8960-F65
-  - 8960-N64
-  - 8960-N65
+  - mtm: 8960-F64
+    name: "SAN64B-6 (F64)"
+  - mtm: 8960-F65
+    name: "SAN64B-6 (F65)"
+  - mtm: 8960-N64
+    name: "SAN64B-6 (N64)"
+  - mtm: 8960-N65
+    name: "SAN64B-6 (N65)"
 SAN24B-6:
-  - 8969-F24
+  - mtm: 8969-F24
+    name: "SAN24B-6"
 TS2290:
-  - 3580-H9S
+  - mtm: 3580-H9S
+    name: "TS2290"
 TS2230:
-  - 3580-S3V
+  - mtm: 3580-S3V
+    name: "TS2230"
 TS3580:
-  - 3580-L33
-  - 3580-H23
-  - 3580-L23
-  - 3580-H13
-  - 3580-L13
+  - mtm: 3580-L33
+    name: "TS3580 (L33)"
+  - mtm: 3580-H23
+    name: "TS3580 (H23)"
+  - mtm: 3580-L23
+    name: "TS3580 (L23)"
+  - mtm: 3580-H13
+    name: "TS3580 (H13)"
+  - mtm: 3580-L13
+    name: "TS3580 (L13)"
 Hardware Management Console:
-  - 7063-CR2
-  - 7063-CR1
+  - mtm: 7063-CR2
+    name: "HMC CR2"
+  - mtm: 7063-CR1
+    name: "HMC CR1"
