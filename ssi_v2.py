@@ -2,6 +2,9 @@ import yaml
 import logging
 import re
 import time
+import argparse
+import glob
+import json
 from playwright.sync_api import sync_playwright
 from datetime import datetime
 import os
@@ -15,39 +18,63 @@ if sys.stdout.encoding != 'utf-8':
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger("IBM-SRE")
 
+# 設定檔目錄：先讀根目錄 (models.yaml，帶型號名稱)，再讀 yaml_temp/ 補充機型
+CONFIG_DIRS = ['.', 'yaml_temp']
+
 class IBMLifecycleHarness:
     def __init__(self):
         self.models_data = self._load_config()
         self.results = []
         self.report_path = 'readme.md'
+        self._search_dumped = False
 
     def _load_config(self):
         combined_data = {}
-        # 掃描當前目錄所有 YAML 檔案
-        yaml_files = [f for f in os.listdir('.') if f.endswith('.yaml') and f != 'package.json']
+        seen = {}  # MTM -> 首次出現的分組，跨檔去重 (先讀到者優先)
+        yaml_files = []
+        for d in CONFIG_DIRS:
+            if os.path.isdir(d):
+                yaml_files += sorted(os.path.normpath(os.path.join(d, f)) for f in os.listdir(d) if f.endswith('.yaml'))
         print(f"[*] 偵測到 {len(yaml_files)} 個設定檔: {yaml_files}")
         
+        dup_count = 0
         for yf in yaml_files:
             try:
                 with open(yf, 'r', encoding='utf-8') as f:
                     data = yaml.safe_load(f)
-                    if data:
-                        # 正規化：支援舊格式 (純字串) 與新格式 (dict with mtm/name)
-                        normalized = {}
-                        for category, items in data.items():
-                            norm_items = []
-                            for item in items:
-                                if isinstance(item, dict):
-                                    norm_items.append({
-                                        "mtm": item.get("mtm", ""),
-                                        "name": item.get("name", "")
-                                    })
-                                else:
-                                    norm_items.append({"mtm": str(item), "name": ""})
-                            normalized[category] = norm_items
-                        combined_data.update(normalized)
+                if not data:
+                    continue
+                # 支援兩種格式:
+                #   舊格式 (models.yaml): {分組: [ {mtm, name} | "MTM" ]}
+                #   新格式 (yaml_temp/):  {displayName, enabled, models: ["MTM", ...]}
+                if isinstance(data.get("models"), list):
+                    if data.get("enabled", True) is False:
+                        print(f"  [-] {yf} 已停用 (enabled: false)，略過")
+                        continue
+                    category = data.get("displayName") or os.path.splitext(os.path.basename(yf))[0]
+                    groups = {category: data["models"]}
+                else:
+                    groups = data
+                
+                for category, items in groups.items():
+                    bucket = combined_data.setdefault(category, [])
+                    for item in items or []:
+                        if isinstance(item, dict):
+                            mtm, name = str(item.get("mtm", "")).strip(), item.get("name", "") or ""
+                        else:
+                            mtm, name = str(item).strip(), ""
+                        if not mtm:
+                            continue
+                        if mtm.upper() in seen:
+                            dup_count += 1
+                            continue
+                        seen[mtm.upper()] = category
+                        bucket.append({"mtm": mtm, "name": name})
             except Exception as e:
                 print(f"  [!] 讀取 {yf} 失敗: {e}")
+        
+        combined_data = {k: v for k, v in combined_data.items() if v}
+        print(f"[*] 共 {len(seen)} 個機型，{len(combined_data)} 個分組 (略過重複 {dup_count} 筆)")
         return combined_data
 
     def normalize_date(self, date_str):
@@ -155,7 +182,12 @@ class IBMLifecycleHarness:
 
                 try:
                     all_links = page.locator("a").all()
-                    if len(all_links) < 15: continue
+                    if len(all_links) < 15:
+                        # 搜尋頁未正常渲染 (改版或被阻擋)，記錄以利判斷
+                        try: title = page.title()
+                        except: title = "?"
+                        print(f"    [WARN] 搜尋結果頁連結過少 ({len(all_links)})，略過。頁面標題: {title}")
+                        continue
                     
                     candidates = []
                     prefix = model.split('-')[0]
@@ -194,6 +226,20 @@ class IBMLifecycleHarness:
                                     candidates.append({"title": title, "url": href})
                                     if len(candidates) >= 2: break
                             except: continue
+
+                    if not candidates:
+                        print(f"    [WARN] 搜尋結果頁找不到任何公告/Sales Manual 連結 (共 {len(all_links)} 個連結)")
+                        # 每個程序只傾印一次頁面摘要，供判斷是改版還是被阻擋
+                        if not self._search_dumped:
+                            self._search_dumped = True
+                            try:
+                                print(f"      [DIAG] URL: {page.url} | 標題: {page.title()}")
+                                hrefs = [l.get_attribute("href") or "" for l in all_links[:40]]
+                                print(f"      [DIAG] 前 40 個連結: {hrefs}")
+                                body = page.evaluate("() => document.body.innerText")[:1500]
+                                print(f"      [DIAG] 頁面文字: {body!r}")
+                            except Exception as e:
+                                print(f"      [DIAG] 傾印失敗: {e}")
 
                     # 優先級排序：完全匹配型號的排在前面
                     candidates.sort(key=lambda x: 1 if (model_full in x['title'].upper() or model_clean in x['title'].upper()) else 2)
@@ -461,7 +507,16 @@ class IBMLifecycleHarness:
         model_name = model_info.get("name", "") if isinstance(model_info, dict) else ""
         return {"Model": model, "ModelName": model_name, "Announced": "N/A", "Available": "N/A", "Withdrawn": "N/A", "EOS_Std": "N/A", "EOS_Full": "N/A", "Url": "-"}
 
-    def run(self):
+    def _tasks(self, shard=0, num_shards=1):
+        # 依設定檔順序攤平後以輪替方式分片，讓各分片分到的分組與機型數量相近
+        flat = [(category, m) for category, models in self.models_data.items() for m in models]
+        return [t for i, t in enumerate(flat) if i % num_shards == shard]
+
+    def run(self, shard=0, num_shards=1, out_path=None):
+        tasks = self._tasks(shard, num_shards)
+        if num_shards > 1:
+            print(f"[*] 分片 {shard + 1}/{num_shards}: 負責 {len(tasks)} 個機型")
+        
         with sync_playwright() as p:
             # 啟動可視化以便調試 (根據 rules: 高級審美與互動)
             browser = p.chromium.launch(headless=True)
@@ -469,27 +524,116 @@ class IBMLifecycleHarness:
             page = context.new_page()
             
             all_results = {}
+            flat_results = []
             try:
-                for category, models in self.models_data.items():
-                    print(f"\n{'='*20} 處理分組: {category} {'='*20}")
-                    category_res = []
-                    for idx, model_info in enumerate(models):
-                        print(f"進度: [{idx+1}/{len(models)}]")
-                        try:
-                            res = self.process_model(model_info, page)
-                            category_res.append(res)
-                        except Exception as e:
-                            print(f"    [CRITICAL] 處理型號 {model_info.get('mtm', model_info)} 時發生嚴重錯誤: {e}")
-                            category_res.append(self._null_result(model_info))
-                            
-                        # 資源回收
-                        if (idx + 1) % 10 == 0:
-                            page.close()
-                            page = context.new_page()
-                    all_results[category] = category_res
+                current = None
+                for idx, (category, model_info) in enumerate(tasks):
+                    if category != current:
+                        print(f"\n{'='*20} 處理分組: {category} {'='*20}")
+                        current = category
+                    print(f"進度: [{idx+1}/{len(tasks)}]")
+                    try:
+                        res = self.process_model(model_info, page)
+                    except Exception as e:
+                        print(f"    [CRITICAL] 處理型號 {model_info.get('mtm', model_info)} 時發生嚴重錯誤: {e}")
+                        res = self._null_result(model_info)
+                    all_results.setdefault(category, []).append(res)
+                    flat_results.append(res)
+                    
+                    # 分片模式下逐筆寫出，即使工作逾時被中止也能保留已完成的結果
+                    if out_path:
+                        self._write_json(out_path, flat_results)
+                        
+                    # 資源回收
+                    if (idx + 1) % 10 == 0:
+                        page.close()
+                        page = context.new_page()
             finally:
                 browser.close()
-                self._write_report(all_results)
+                if out_path:
+                    self._write_json(out_path, flat_results)
+                    print(f"\n[+] 分片完成，結果已寫入: {out_path} ({len(flat_results)} 筆)")
+                else:
+                    self._write_report(all_results)
+
+    def _write_json(self, path, results):
+        os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+        tmp = path + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(results, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
+
+    def _read_previous_report(self):
+        # 解析現有 readme.md，供合併時補回缺漏 (例如某分片逾時) 的機型
+        prev = {}
+        if not os.path.exists(self.report_path):
+            return prev
+        row_re = re.compile(r'^\|(.+)\|\s*$')
+        with open(self.report_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                m = row_re.match(line.strip())
+                if not m:
+                    continue
+                cells = [c.strip() for c in m.group(1).split('|')]
+                if len(cells) != 8 or cells[1] in ("Model (MTM)", "") or cells[1].startswith('-'):
+                    continue
+                url_m = re.search(r'\((.+)\)', cells[7])
+                prev[cells[1].upper()] = {
+                    "Model": cells[1], "ModelName": "" if cells[0] == "-" else cells[0],
+                    "Announced": cells[2], "Available": cells[3], "Withdrawn": cells[4],
+                    "EOS_Std": cells[5], "EOS_Full": cells[6], "Url": url_m.group(1) if url_m else "-"
+                }
+        return prev
+
+    def merge(self, results_dir):
+        scraped = {}
+        files = sorted(glob.glob(os.path.join(results_dir, '*.json')))
+        for jf in files:
+            try:
+                with open(jf, 'r', encoding='utf-8') as f:
+                    for r in json.load(f):
+                        scraped[r["Model"].upper()] = r
+            except Exception as e:
+                print(f"  [!] 讀取 {jf} 失敗: {e}")
+        print(f"[*] 讀入 {len(files)} 個分片結果，共 {len(scraped)} 筆")
+        
+        previous = self._read_previous_report()
+        all_results = {}
+        reused, missing = [], []
+        kept_fields = 0
+        for category, models in self.models_data.items():
+            rows = []
+            for model_info in models:
+                key = model_info["mtm"].upper()
+                if key in scraped:
+                    res = dict(scraped[key])
+                    # 本次查無 (N/A) 但上一版有值的欄位沿用上一版，避免來源暫時失效時把既有資料洗掉
+                    prev = previous.get(key)
+                    if prev:
+                        for f in ("Announced", "Available", "Withdrawn", "EOS_Std", "EOS_Full"):
+                            if res.get(f, "N/A") == "N/A" and prev[f] != "N/A":
+                                res[f] = prev[f]
+                                kept_fields += 1
+                        if res.get("Url", "-") == "-" and prev["Url"] != "-":
+                            res["Url"] = prev["Url"]
+                elif key in previous:
+                    res = previous[key]
+                    reused.append(model_info["mtm"])
+                else:
+                    res = self._null_result(model_info)
+                    missing.append(model_info["mtm"])
+                # 型號名稱以設定檔為準
+                res["ModelName"] = model_info.get("name", "") or res.get("ModelName", "")
+                rows.append(res)
+            all_results[category] = rows
+        
+        if kept_fields:
+            print(f"  [WARN] {kept_fields} 個欄位本次查無資料，沿用上一版報表的值")
+        if reused:
+            print(f"  [WARN] {len(reused)} 個機型本次無結果，沿用上一版報表: {reused}")
+        if missing:
+            print(f"  [WARN] {len(missing)} 個機型無任何資料，填入 N/A: {missing}")
+        self._write_report(all_results)
 
     def _write_report(self, all_results):
         with open(self.report_path, 'w', encoding='utf-8') as f:
@@ -509,5 +653,17 @@ class IBMLifecycleHarness:
         print(f"\n[+] 任務完成，報表已更新: {self.report_path}")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="IBM 硬體生命週期爬蟲")
+    parser.add_argument("--shard", type=int, default=0, help="本次執行的分片編號 (從 0 開始)")
+    parser.add_argument("--num-shards", type=int, default=1, help="分片總數")
+    parser.add_argument("--out", help="將結果寫成 JSON (分片模式)，不更新 readme.md")
+    parser.add_argument("--merge", metavar="DIR", help="合併 DIR 下的分片 JSON 並產生 readme.md (不爬取)")
+    args = parser.parse_args()
+    if not 0 <= args.shard < args.num_shards:
+        parser.error("--shard 必須介於 0 與 --num-shards - 1 之間")
+
     harness = IBMLifecycleHarness()
-    harness.run()
+    if args.merge:
+        harness.merge(args.merge)
+    else:
+        harness.run(args.shard, args.num_shards, args.out)
