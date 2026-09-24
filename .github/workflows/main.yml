@@ -5,12 +5,19 @@ on:
     - cron: '0 0 */14 * 1' # 每隔 14 天且當天為週一時執行
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  update-lifecycle:
+  # 機型約 900 筆，單一工作會超過 GitHub Actions 6 小時上限，故分片平行爬取
+  scrape:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,9 +34,51 @@ jobs:
           pip install -r .github/workflows/requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run Scraper
+      - name: Run Scraper (shard ${{ matrix.shard }})
         # 使用 -u 強制即時輸出，避免 GitHub Actions 緩衝導致看起來卡住
-        run: python -u ssi_v2.py
+        # 步驟逾時後仍會上傳已完成的部分結果
+        timeout-minutes: 330
+        run: python -u ssi_v2.py --shard ${{ matrix.shard }} --num-shards 10 --out results/shard-${{ matrix.shard }}.json
+
+      - name: Upload shard result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.shard }}
+          path: results/shard-${{ matrix.shard }}.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  report:
+    needs: scrape
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: '.github/workflows/requirements.txt'
+
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+
+      - name: Download shard results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: results
+          merge-multiple: true
+
+      - name: Merge results into readme
+        run: python -u ssi_v2.py --merge results
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5

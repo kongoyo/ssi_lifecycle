@@ -1,42 +1,41 @@
-debug_puppeteer.js
-headings.txt
-requirements.txt
-debug_page.html
-debug_scraper.py
-debug_screenshot.png
-ibm_product_lifecycle_list.csv
-test.yaml
+# 虛擬環境 / 快取
+.venv/
+__pycache__/
+node_modules/
+package.json
+package-lock.json
+
+# 本機除錯腳本與輸出
 debug_puppeteer copy.js
+debug_puppeteer copy 2.js
+debug_scraper.py
 debug_scraper1.py
 debug_scrapy.py
-debug_search_error.png
-.gitignore
-error_9105-22A.png
-設計規格書.txt
-package-lock.json
-package.json
-design.txt
-debug_dump/3480-A11_extract_fail_1769341157980.txt
-debug_dump/3480-A11_extract_fail_1769341162944.txt
-debug_dump/3403-S00_parse_fail_2026-01-25T11-48-52-227Z.txt
-debug_puppeteer copy 2.js
+debug_dump/
+debug_page.html
+debug_*.png
+error_*.png
 raw_full_inner_html.html
 raw_inner_text.txt
-node_modules/
-debug_puppeteer.js
-analyze_webpg.js
-ssi_lifecycle1(URL).py
-__pycache__/ssi_v2.cpython-313.pyc
-debug_search_9080-HEX.png
-debug_search_9348-012.png
-ibmi_models.txt
+headings.txt
 output.log
+
+# 舊版 / 測試腳本
 ssi_lifecycle1.py
+ssi_lifecycle1(URL).py
 test_single.py
-verify_v2.py
-ssi_lifecycle1.py
-debug_9043.png
 test_9043.py
-test_report.md
+verify_v2.py
 verify_9043_fix.py
-.venv/
+test_report.md
+test.yaml
+
+# 分片執行的中間結果 (CI 產生)
+results/
+
+# 其他本機文件
+ibm_product_lifecycle_list.csv
+設計規格書.txt
+design.txt
+requirements.txt
+!.github/workflows/requirements.txt
