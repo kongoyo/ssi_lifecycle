@@ -26,6 +26,7 @@ class IBMLifecycleHarness:
         self.models_data = self._load_config()
         self.results = []
         self.report_path = 'readme.md'
+        self._search_dumped = False
 
     def _load_config(self):
         combined_data = {}
@@ -225,6 +226,20 @@ class IBMLifecycleHarness:
                                     candidates.append({"title": title, "url": href})
                                     if len(candidates) >= 2: break
                             except: continue
+
+                    if not candidates:
+                        print(f"    [WARN] 搜尋結果頁找不到任何公告/Sales Manual 連結 (共 {len(all_links)} 個連結)")
+                        # 每個程序只傾印一次頁面摘要，供判斷是改版還是被阻擋
+                        if not self._search_dumped:
+                            self._search_dumped = True
+                            try:
+                                print(f"      [DIAG] URL: {page.url} | 標題: {page.title()}")
+                                hrefs = [l.get_attribute("href") or "" for l in all_links[:40]]
+                                print(f"      [DIAG] 前 40 個連結: {hrefs}")
+                                body = page.evaluate("() => document.body.innerText")[:1500]
+                                print(f"      [DIAG] 頁面文字: {body!r}")
+                            except Exception as e:
+                                print(f"      [DIAG] 傾印失敗: {e}")
 
                     # 優先級排序：完全匹配型號的排在前面
                     candidates.sort(key=lambda x: 1 if (model_full in x['title'].upper() or model_clean in x['title'].upper()) else 2)
