@@ -181,7 +181,12 @@ class IBMLifecycleHarness:
 
                 try:
                     all_links = page.locator("a").all()
-                    if len(all_links) < 15: continue
+                    if len(all_links) < 15:
+                        # 搜尋頁未正常渲染 (改版或被阻擋)，記錄以利判斷
+                        try: title = page.title()
+                        except: title = "?"
+                        print(f"    [WARN] 搜尋結果頁連結過少 ({len(all_links)})，略過。頁面標題: {title}")
+                        continue
                     
                     candidates = []
                     prefix = model.split('-')[0]
@@ -580,12 +585,22 @@ class IBMLifecycleHarness:
         previous = self._read_previous_report()
         all_results = {}
         reused, missing = [], []
+        kept_fields = 0
         for category, models in self.models_data.items():
             rows = []
             for model_info in models:
                 key = model_info["mtm"].upper()
                 if key in scraped:
-                    res = scraped[key]
+                    res = dict(scraped[key])
+                    # 本次查無 (N/A) 但上一版有值的欄位沿用上一版，避免來源暫時失效時把既有資料洗掉
+                    prev = previous.get(key)
+                    if prev:
+                        for f in ("Announced", "Available", "Withdrawn", "EOS_Std", "EOS_Full"):
+                            if res.get(f, "N/A") == "N/A" and prev[f] != "N/A":
+                                res[f] = prev[f]
+                                kept_fields += 1
+                        if res.get("Url", "-") == "-" and prev["Url"] != "-":
+                            res["Url"] = prev["Url"]
                 elif key in previous:
                     res = previous[key]
                     reused.append(model_info["mtm"])
@@ -597,6 +612,8 @@ class IBMLifecycleHarness:
                 rows.append(res)
             all_results[category] = rows
         
+        if kept_fields:
+            print(f"  [WARN] {kept_fields} 個欄位本次查無資料，沿用上一版報表的值")
         if reused:
             print(f"  [WARN] {len(reused)} 個機型本次無結果，沿用上一版報表: {reused}")
         if missing:
